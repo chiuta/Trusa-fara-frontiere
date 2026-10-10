@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self' data: blob:; worker-src blob:; connect-src 'none'; base-uri 'none'; form-action 'none';">
+<title>Trusa fără frontiere — 15 module offline, inspirate din catalogul YunoHost</title>
+<meta name="description" content="Trusă de 15 unelte într-un singur fișier HTML, fără cont și fără trimitere de date: regex, JSON, diff, hash, parole, calculator subnet, notițe, foaie de calcul, Kanban și altele.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Trusa fără frontiere — 15 unelte offline">
+<meta property="og:description" content="15 module într-un singur fișier HTML, fără cont și fără trimitere de date. Datele rămân în browserul tău.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%235b52e8'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white'%3E%E2%97%88%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#07060b; --bg-elevated:#0d0b16; --bg-card:#131019; --bg-card-hover:#1b1728;
+    --border:#242032; --border-strong:#383150;
+    --text:#f1eef9; --text-muted:#9791ac; --text-faint:#867e94;
+    --accent:#7a72f2; --accent-fill:#5b52e8; --accent-dim:rgba(122,114,242,.14);
+    --good:#52d68a; --bad:#e2607a; --warn:#edaa4a;
+    --radius:10px;
+    --mono:ui-monospace,"SF Mono","Cascadia Code","Roboto Mono",Consolas,monospace;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#f7f5f1; --bg-elevated:#ffffff; --bg-card:#ffffff; --bg-card-hover:#f1eeff;
+      --border:#e6e1f0; --border-strong:#cec5e8;
+      --text:#171320; --text-muted:#584f70; --text-faint:#726c84;
+      --accent:#5a4dd1; --accent-fill:#5a4dd1; --good:#0c7038; --bad:#b23052; --warn:#8f5a06;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#07060b; --bg-elevated:#0d0b16; --bg-card:#131019; --bg-card-hover:#1b1728;
+    --border:#242032; --border-strong:#383150; --text:#f1eef9; --text-muted:#9791ac; --text-faint:#867e94;
+    --accent:#7a72f2; --accent-fill:#5b52e8; --good:#52d68a; --bad:#e2607a; --warn:#edaa4a;
+  }
+  :root[data-theme="light"]{
+    --bg:#f7f5f1; --bg-elevated:#ffffff; --bg-card:#ffffff; --bg-card-hover:#f1eeff;
+    --border:#e6e1f0; --border-strong:#cec5e8; --text:#171320; --text-muted:#584f70; --text-faint:#726c84;
+    --accent:#5a4dd1; --good:#0c7038; --bad:#b23052; --warn:#8f5a06;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+  }
+  ::selection{background:var(--accent-fill); color:#fff;}
+  a{color:var(--accent);}
+  button{font-family:inherit;}
+  input, textarea, select{font-family:inherit; color:inherit;}
+
+  .btn{
+    font-family:var(--mono); font-size:12.5px; font-weight:600; background:var(--bg-elevated);
+    color:var(--text); border:1px solid var(--border-strong); border-radius:8px; padding:8px 13px;
+    cursor:pointer; transition:border-color .15s ease, background .15s ease, transform .1s ease;
+  }
+  .btn:hover{border-color:var(--accent); background:var(--bg-card-hover);}
+  .btn:active{transform:translateY(1px);}
+  .btn:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+  .btn.primary{background:var(--accent-fill); color:#fff; border-color:var(--accent-fill);}
+  .btn.primary:hover{filter:brightness(1.08);}
+  .btn.small{padding:5px 9px; font-size:11.5px;}
+  .btn.danger{color:var(--bad); border-color:var(--bad);}
+  .skip-link{position:absolute; left:8px; top:-60px; z-index:50; background:var(--accent-fill); color:#fff; padding:8px 12px; border-radius:8px; font-size:13px;}
+  .skip-link:focus{top:8px;}
+  .banner{border:1px solid var(--warn); color:var(--warn); background:var(--bg-elevated); border-radius:8px; padding:8px 12px; font-size:12.5px; margin:0 0 14px;}
+  #content:focus, #content h1:focus{outline:none;}
+  .note-item:focus-visible, .ss-grid input:focus-visible, g[tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:1px;}
+
+  input[type="text"], input[type="number"], input[type="search"], input[type="date"], textarea, select{
+    background:var(--bg-elevated); border:1px solid var(--border-strong); border-radius:8px;
+    padding:8px 11px; font-size:13.5px; width:100%;
+  }
+  textarea{resize:vertical; font-family:var(--mono);}
+  input:focus, textarea:focus, select:focus{outline:2px solid var(--accent); outline-offset:1px;}
+  label{font-size:12px; color:var(--text-muted); display:block; margin:0 0 5px;}
+  .field{margin-bottom:14px;}
+  .row{display:flex; gap:10px; flex-wrap:wrap;}
+  .row > *{flex:1; min-width:140px;}
+
+  table{border-collapse:collapse; width:100%; font-size:13px;}
+  th, td{border:1px solid var(--border); padding:7px 9px; text-align:left; vertical-align:top;}
+  th{background:var(--bg-elevated); font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--text-muted);}
+  code, .mono{font-family:var(--mono);}
+  .card{background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:16px;}
+  .muted{color:var(--text-muted);}
+  .faint{color:var(--text-faint); font-size:12px;}
+  .pill{font-family:var(--mono); font-size:11px; background:var(--bg-elevated); border:1px solid var(--border); border-radius:20px; padding:2px 9px; display:inline-block;}
+  .stack{display:flex; flex-direction:column; gap:12px;}
+  .hint{font-size:12.5px; color:var(--text-faint); margin-top:6px;}
+  .ok{color:var(--good);} .no{color:var(--bad);} .warn{color:var(--warn);}
+
+  /* app shell */
+  #app{display:flex; flex-direction:column; height:100%; min-height:100vh;}
+  header.top{
+    border-bottom:1px solid var(--border); padding:12px 16px; display:flex; align-items:center;
+    justify-content:space-between; gap:10px; flex-wrap:wrap;
+  }
+  .brand{font-family:var(--mono); font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px;}
+  .brand .dot{color:var(--accent);}
+  .top-actions{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+  .shell{display:flex; flex:1; min-height:0;}
+  nav#sidebar{
+    width:250px; flex:none; border-right:1px solid var(--border); overflow-y:auto; padding:14px 10px;
+  }
+  nav#sidebar .cat-label{
+    font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.08em;
+    color:var(--text-faint); padding:14px 10px 6px;
+  }
+  nav#sidebar button.mod-btn{
+    display:flex; align-items:center; gap:9px; width:100%; text-align:left; background:none; border:none;
+    color:var(--text-muted); padding:8px 10px; border-radius:8px; cursor:pointer; font-size:13px;
+    font-family:var(--sans);
+  }
+  nav#sidebar button.mod-btn:hover{background:var(--bg-card-hover); color:var(--text);}
+  nav#sidebar button.mod-btn.active{background:var(--accent-dim); color:var(--accent); font-weight:600;}
+  nav#sidebar button.mod-btn:focus-visible{outline:2px solid var(--accent); outline-offset:-2px;}
+  nav#sidebar button.mod-btn .ic{width:16px; text-align:center; flex:none;}
+  main#content{flex:1; min-width:0; overflow-y:auto; padding:24px 28px 60px;}
+  .mod-head{margin-bottom:18px;}
+  .mod-head h1{font-family:var(--mono); font-size:20px; margin:0 0 6px;}
+  .mod-head .src{font-size:12px; color:var(--text-faint);}
+  .mod-head .src b{color:var(--text-muted); font-weight:600;}
+
+  #mobile-nav-toggle{display:none;}
+  @media (max-width:860px){
+    #mobile-nav-toggle{display:inline-flex;}
+    nav#sidebar{
+      position:fixed; inset:0 20% 0 0; z-index:20; background:var(--bg); transform:translateX(-105%);
+      transition:transform .2s ease, visibility 0s linear .2s; width:auto; visibility:hidden;
+    }
+    nav#sidebar.open{transform:translateX(0); visibility:visible; transition:transform .2s ease;}
+    main#content{padding:18px 16px 60px;}
+  }
+
+  dialog#about{
+    max-width:640px; width:92%; background:var(--bg-card); color:var(--text); border:1px solid var(--border-strong);
+    border-radius:14px; padding:0;
+  }
+  dialog#about::backdrop{background:rgba(0,0,0,.55);}
+  dialog#about .about-inner{padding:22px 24px; max-height:80vh; overflow-y:auto;}
+  dialog#about h2{font-family:var(--mono); font-size:17px; margin-top:0;}
+  dialog#about ul{padding-left:20px; font-size:13.5px;}
+  dialog#about li{margin-bottom:6px;}
+
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:700px){.grid-2{grid-template-columns:1fr;}}
+  mark{background:var(--accent-dim); color:var(--accent); border-radius:3px; padding:0 2px;}
+  .diff-add{background:rgba(82,214,138,.15); color:var(--good);}
+  .diff-del{background:rgba(226,96,122,.15); color:var(--bad); text-decoration:line-through;}
+  .diff-line{font-family:var(--mono); font-size:12.5px; white-space:pre-wrap; padding:1px 6px; border-radius:3px;}
+  .kanban-cols{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+  @media (max-width:760px){.kanban-cols{grid-template-columns:1fr;}}
+  .kanban-card{background:var(--bg-elevated); border:1px solid var(--border); border-radius:8px; padding:9px 10px; margin-bottom:8px; font-size:13px;}
+  .kanban-card .kc-actions{display:flex; gap:5px; margin-top:6px;}
+  .ss-grid{border-collapse:collapse;}
+  .ss-grid td{border:1px solid var(--border); padding:0;}
+  .ss-grid input{border:none; border-radius:0; padding:4px 6px; font-size:12.5px; width:78px; background:transparent;}
+  .ss-grid th{padding:3px 6px; font-size:11px;}
+  .notebook-layout{display:grid; grid-template-columns:200px 1fr; gap:14px;}
+  @media (max-width:760px){.notebook-layout{grid-template-columns:1fr;}}
+  .note-item{padding:7px 9px; border-radius:7px; cursor:pointer; font-size:13px; color:var(--text-muted);}
+  .note-item:hover{background:var(--bg-card-hover);}
+  .note-item.active{background:var(--accent-dim); color:var(--accent); font-weight:600;}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#content">Sari la conținut</a>
+<noscript><p style="padding:16px;font-family:sans-serif">Trusa fără frontiere are nevoie de JavaScript ca să funcționeze (rulează local în browser, nu trimite nimic pe rețea).</p></noscript>
+<div id="app">
+  <header class="top">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <button class="btn small" id="mobile-nav-toggle" type="button" aria-label="Meniu module" aria-controls="sidebar" aria-expanded="false">☰</button>
+      <div class="brand"><span class="dot">◈</span> trusa fără frontiere</div>
+    </div>
+    <div class="top-actions">
+      <button class="btn small" id="export-btn" type="button" title="Descarcă datele salvate local într-un fișier JSON">export date</button>
+      <button class="btn small" id="import-btn" type="button" title="Încarcă un fișier JSON exportat anterior">import date</button>
+      <input type="file" id="import-file" accept=".json,application/json" hidden aria-label="Fișier de import date">
+      <button class="btn small" id="about-btn" type="button">despre &amp; surse</button>
+      <button class="btn small" id="theme-btn" type="button" aria-label="Comută tema">◐</button>
+    </div>
+  </header>
+  <div class="shell">
+    <nav id="sidebar" aria-label="Module"></nav>
+    <main id="content" tabindex="-1"></main>
+  </div>
+</div>
+
+<dialog id="about" aria-labelledby="about-title">
+  <div class="about-inner">
+    <h2 id="about-title">Ce e asta, mai exact</h2>
+    <p>15 module funcționale, fără cont și fără trimitere de date: aplicația nu face cereri de rețea (vezi <code>connect-src 'none'</code> în CSP; singurele conexiuni apar dacă apeși un link extern, de exemplu cel către <a href="https://github.com/YunoHost/apps" target="_blank" rel="noopener noreferrer">catalogul YunoHost</a>). Modulele sunt versiuni mici, locale, inspirate de funcționalitatea de bază a unor aplicații din catalogul YunoHost. Proiectul nu este afiliat YunoHost și nu conține cod din aplicațiile menționate.</p>
+    <p><b>Ce NU e:</b> nu este o reconstrucție a aplicațiilor din catalog. Marea majoritate rulează pe server — bază de date, multi-user, rețea — și partajarea/sincronizarea/federația sunt chiar funcția lor, nu un accesoriu de scos. Un shortener de URL fără server care rezolvă linkul nu mai e un shortener; un chat fără server nu mai e chat. Genurile alea (comunicare, sincronizare reală, social media, publishing live, IoT) nu au echivalent onest într-un singur fișier HTML.</p>
+    <p>Am păstrat categoriile cu funcționalitate care poate rula doar în browser: <b>dev</b>, <b>office</b>, <b>small_utilities</b>, <b>system_tools</b>, <b>productivity_and_management</b>, <b>reading</b> — plus generatorul de parole (categoria <b>synchronization</b>).</p>
+    <p class="faint">Datele modulelor (notițe, foaie de calcul, hartă mentală, Kanban, jurnal financiar, fragmente) sunt salvate local, doar în acest browser, în <code>localStorage</code> cu prefix <code>tff:</code>, <b>necriptat</b>, și nu pleacă nicăieri. Ștergerea datelor site-ului din browser le șterge; folosește „export date” ca să faci o copie de rezervă. Nu păstra parole sau secrete în module. Construit de Claude la cererea lui Alexio, 5 iulie 2026.</p>
+    <button class="btn primary" id="about-close" type="button" style="margin-top:6px;">Am înțeles</button>
+  </div>
+</dialog>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- shared utils ---------- */
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+function el(tag, attrs, children){
+  var e = document.createElement(tag);
+  attrs = attrs || {};
+  for(var k in attrs){
+    if(k === "class") e.className = attrs[k];
+    else if(k === "html") e.innerHTML = attrs[k];
+    else if(k.indexOf("on") === 0 && typeof attrs[k] === "function") e.addEventListener(k.slice(2), attrs[k]);
+    else e.setAttribute(k, attrs[k]);
+  }
+  (children||[]).forEach(function(c){
+    if(c == null) return;
+    e.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
+  });
+  return e;
+}
+var storageFailed = false;
+var storageListeners = [];
+var safeStorage = {
+  get: function(key, fallback){
+    try{
+      var v = window.localStorage.getItem("tff:" + key);
+      return v === null ? fallback : JSON.parse(v);
+    }catch(e){ return fallback; }
+  },
+  set: function(key, val){
+    try{ window.localStorage.setItem("tff:" + key, JSON.stringify(val)); return true; }
+    catch(e){
+      storageFailed = true;
+      storageListeners.forEach(function(f){ try{ f(); }catch(_){} });
+      return false;
+    }
+  },
+  getArray: function(key, fallback){
+    var v = this.get(key, null);
+    return Array.isArray(v) ? v : fallback;
+  },
+  getObject: function(key, fallback){
+    var v = this.get(key, null);
+    return (v && typeof v === "object" && !Array.isArray(v)) ? v : fallback;
+  }
+};
+function uid(){
+  var a = new Uint32Array(2);
+  if(window.crypto && window.crypto.getRandomValues){ window.crypto.getRandomValues(a); }
+  else { a[0] = Date.now() >>> 0; a[1] = (performance.now() * 1000) >>> 0; }
+  return a[0].toString(36) + a[1].toString(36);
+}
+function copyText(text, btn){
+  function done(ok){
+    if(!btn) return;
+    var old = btn.getAttribute("data-label") || btn.textContent;
+    btn.setAttribute("data-label", old);
+    btn.textContent = ok ? "Copiat" : "Nu s-a putut copia";
+    setTimeout(function(){ btn.textContent = old; }, 1400);
+  }
+  function legacy(){
+    var ok = false;
+    try{
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+    }catch(e){ ok = false; }
+    done(ok);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){ done(true); }, legacy);
+  } else { legacy(); }
+}
+function fmtBytes(n){
+  if(n < 1024) return n + " B";
+  var u = ["KB","MB","GB","TB"]; var i = -1;
+  do{ n/=1024; i++; }while(n>=1024 && i<u.length-1);
+  return n.toFixed(n<10?2:1) + " " + u[i];
+}
+function fmtDate(ts){
+  var d = new Date(ts);
+  return d.toLocaleDateString("ro-RO") + " " + d.toLocaleTimeString("ro-RO",{hour:"2-digit",minute:"2-digit"});
+}
+
+/* ---------- module registry (filled below) ---------- */
+var MODULES = [];
+var CAT_LABELS = {
+  dev: "Dezvoltare",
+  office: "Birou",
+  small_utilities: "Utilitare mici",
+  system_tools: "Instrumente de sistem",
+  productivity_and_management: "Productivitate",
+  reading: "Lectură",
+  synchronization: "Sincronizare"
+};
+var CAT_ORDER = ["dev","office","small_utilities","system_tools","productivity_and_management","reading","synchronization"];
+
+/* ===== MODULE: Regex Lab ===== */
+MODULES.push({
+  id:"regex", cat:"dev", icon:"◈", name:"Regex Lab",
+  inspired:["categoria dev — regex e o unealtă transversală de dezvoltator"],
+  render:function(container, ctx){
+    var el = ctx.el, escapeHtml = ctx.escapeHtml;
+    var patternInput = el("input",{type:"text"});
+    patternInput.value = "\\b[\\w.+-]+@[\\w-]+\\.[a-zA-Z]{2,}\\b";
+    var flagsG = el("input",{type:"checkbox"}); flagsG.checked = true;
+    var flagsI = el("input",{type:"checkbox"});
+    var flagsM = el("input",{type:"checkbox"});
+    var flagsS = el("input",{type:"checkbox"});
+    var testArea = el("textarea",{rows:"6"});
+    testArea.value = "Contact: alexio@trom.tf sau echipa@example.org\nA doua linie fara adresa.";
+    var output = el("div",{class:"card mono", style:"white-space:pre-wrap; min-height:70px; font-size:13px;"});
+    var matchList = el("div",{style:"margin-top:10px;"});
+    var errorBox = el("div",{class:"no", role:"alert", style:"font-size:12.5px; margin-bottom:8px;"});
+
+    function quickBtn(label, pattern){
+      return el("button",{class:"btn small", type:"button", onclick:function(){ patternInput.value = pattern; run(); }},[label]);
+    }
+
+    var worker = null, workerUrl = null, reqId = 0, timer = null;
+    function stopWorker(){
+      if(timer){ clearTimeout(timer); timer = null; }
+      if(worker){ worker.terminate(); worker = null; }
+    }
+    function runInWorker(pattern, flags, text, done, fail){
+      var myId = ++reqId;
+      stopWorker();
+      try{
+        if(!workerUrl){
+          var src = "self.onmessage=function(e){var d=e.data;try{var re=new RegExp(d.p,d.f),out=[],m,g=0;" +
+            "if(d.f.indexOf('g')!==-1){while((m=re.exec(d.t))!==null&&g<3000){out.push({i:m.index,a:Array.prototype.slice.call(m)});if(m[0]===''){re.lastIndex++;}g++;}}" +
+            "else{m=re.exec(d.t);if(m)out.push({i:m.index,a:Array.prototype.slice.call(m)});}" +
+            "self.postMessage({id:d.id,r:out});}catch(x){self.postMessage({id:d.id,err:String(x.message||x)});}};";
+          workerUrl = URL.createObjectURL(new Blob([src], {type:"text/javascript"}));
+        }
+        worker = new Worker(workerUrl);
+      }catch(e){ return false; }
+      worker.onmessage = function(ev){
+        if(ev.data.id !== myId) return;
+        stopWorker();
+        if(ev.data.err) fail(ev.data.err); else done(ev.data.r);
+      };
+      worker.onerror = function(){ stopWorker(); fail("eroare la rulare"); };
+      timer = setTimeout(function(){
+        stopWorker();
+        fail("Expresia a durat peste 1,5 s și a fost oprită (posibil backtracking catastrofal).");
+      }, 1500);
+      worker.postMessage({id:myId, p:pattern, f:flags, t:text});
+      return true;
+    }
+    function render(matches, text){
+      var parts = [], last = 0;
+      matches.forEach(function(mm){
+        parts.push(escapeHtml(text.slice(last, mm.index)));
+        parts.push("<mark>" + escapeHtml(mm[0] || "") + "</mark>");
+        last = mm.index + mm[0].length;
+      });
+      parts.push(escapeHtml(text.slice(last)));
+      output.innerHTML = parts.join("") || "<span class='faint'>(text gol)</span>";
+      matchList.innerHTML = "";
+      if(matches.length === 0){
+        matchList.appendChild(el("div",{class:"faint"},["Niciun match."]));
+      } else {
+        matches.forEach(function(mm, i){
+          var extra = "";
+          if(mm.length > 1){
+            var gs = [];
+            for(var gi=1; gi<mm.length; gi++) gs.push("grup " + gi + "=" + JSON.stringify(mm[gi]===undefined?null:mm[gi]));
+            extra = " — " + gs.join(", ");
+          }
+          matchList.appendChild(el("span",{class:"pill", style:"margin:2px 4px 2px 0; display:inline-block;"},[
+            "#" + (i+1) + " @" + mm.index + " " + JSON.stringify(mm[0]) + extra
+          ]));
+        });
+        if(matches.length >= 3000 && flags_g()) matchList.appendChild(el("div",{class:"faint"},["Afișate primele 3000 de match-uri."]));
+      }
+    }
+    function flags_g(){ return flagsG.checked; }
+    function run(){
+      errorBox.textContent = "";
+      matchList.innerHTML = "";
+      var flags = "";
+      if(flagsG.checked) flags += "g";
+      if(flagsI.checked) flags += "i";
+      if(flagsM.checked) flags += "m";
+      if(flagsS.checked) flags += "s";
+      var re;
+      try{ re = new RegExp(patternInput.value, flags); }
+      catch(e){ errorBox.textContent = "Regex invalid: " + e.message; output.textContent = testArea.value; return; }
+      var text = testArea.value;
+      // Rulăm într-un Worker cu timeout, ca un pattern cu backtracking catastrofal să nu blocheze pagina.
+      var started = runInWorker(patternInput.value, flags, text, function(rows){
+        render(rows.map(function(r){ var a = r.a.slice(); a.index = r.i; return a; }), text);
+      }, function(msg){
+        errorBox.textContent = msg;
+        output.textContent = text;
+        matchList.innerHTML = "";
+      });
+      if(started === false){
+        // fallback fără Worker (ex. mediu care nu permite Worker din Blob)
+        var matches = [], mm0, guard = 0;
+        if(flags.indexOf("g") !== -1){
+          while((mm0 = re.exec(text)) !== null && guard < 3000){
+            matches.push(mm0);
+            if(mm0[0] === "") re.lastIndex++;
+            guard++;
+          }
+        } else { var single = re.exec(text); if(single) matches.push(single); }
+        render(matches, text);
+      }
+    }
+
+    container.appendChild(el("div",{class:"stack"},[
+      el("div",{class:"field"},[el("label",{},["Pattern (fără / /)"]), patternInput]),
+      el("div",{class:"row"},[
+        el("label",{style:"display:flex;align-items:center;gap:6px;"},[flagsG, "g global"]),
+        el("label",{style:"display:flex;align-items:center;gap:6px;"},[flagsI, "i insensitive"]),
+        el("label",{style:"display:flex;align-items:center;gap:6px;"},[flagsM, "m multiline"]),
+        el("label",{style:"display:flex;align-items:center;gap:6px;"},[flagsS, "s dotAll"])
+      ]),
+      el("div",{},[
+        quickBtn("email", "\\b[\\w.+-]+@[\\w-]+\\.[a-zA-Z]{2,}\\b"),
+        quickBtn("URL", "https?:\\/\\/[^\\s]+"),
+        quickBtn("IPv4", "\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b"),
+        quickBtn("dată AAAA-LL-ZZ", "\\b\\d{4}-\\d{2}-\\d{2}\\b"),
+        quickBtn("cifre", "\\d+")
+      ]),
+      el("div",{class:"field"},[el("label",{},["Text de test"]), testArea]),
+      errorBox,
+      el("div",{class:"field"},[el("label",{},["Rezultat (evidențiat)"]), output]),
+      el("div",{},[el("label",{},["Match-uri"]), matchList])
+    ]));
+    [patternInput, flagsG, flagsI, flagsM, flagsS, testArea].forEach(function(node){
+      node.addEventListener("input", run);
+      node.addEventListener("change", run);
+    });
+    run();
+  }
+});
+
+/* ===== MODULE: JSON Lab ===== */
+MODULES.push({
+  id:"json", cat:"dev", icon:"◈", name:"JSON Lab",
+  inspired:["categoria dev — validare/formatare de date structurate, ex. baserow, dont-code"],
+  render:function(container, ctx){
+    var el = ctx.el;
+    var input = el("textarea",{rows:"10"});
+    input.value = '{\n  "proiect": "Trusa fara frontiere",\n  "module": 15,\n  "offline": true,\n  "surse": ["yunohost/apps"]\n}';
+    var indentSel = el("select",{},[
+      el("option",{value:"2"},["2 spații"]),
+      el("option",{value:"4"},["4 spații"]),
+      el("option",{value:"tab"},["tab"])
+    ]);
+    var status = el("div",{role:"status", style:"font-size:12.5px; margin:8px 0;"});
+    var output = el("textarea",{rows:"12", readonly:"readonly", "aria-label":"Rezultat JSON"});
+    var note = el("div",{class:"hint"},["Numerele întregi mai mari de 2^53 își pierd precizia la parsare (comportament JavaScript)."]);
+
+    function parseOrError(){
+      try{
+        var val = JSON.parse(input.value);
+        status.innerHTML = "<span class='ok'>✓ JSON valid</span>";
+        return val;
+      }catch(e){
+        status.innerHTML = "<span class='no'>✗ " + ctx.escapeHtml(e.message) + "</span>";
+        return undefined;
+      }
+    }
+    function format(){
+      var val = parseOrError();
+      if(val === undefined){ output.value = ""; return; }
+      var ind = indentSel.value === "tab" ? "\t" : parseInt(indentSel.value, 10);
+      output.value = JSON.stringify(val, null, ind);
+    }
+    function minify(){
+      var val = parseOrError();
+      if(val === undefined){ output.value = ""; return; }
+      output.value = JSON.stringify(val);
+    }
+    function sortKeysDeep(v){
+      if(Array.isArray(v)) return v.map(sortKeysDeep);
+      if(v && typeof v === "object"){
+        var out = Object.create(null); // evită ca o cheie "__proto__" să fie pierdută
+        Object.keys(v).sort().forEach(function(k){ out[k] = sortKeysDeep(v[k]); });
+        return out;
+      }
+      return v;
+    }
+    function formatSorted(){
+      var val = parseOrError();
+      if(val === undefined){ output.value = ""; return; }
+      var ind = indentSel.value === "tab" ? "\t" : parseInt(indentSel.value, 10);
+      output.value = JSON.stringify(sortKeysDeep(val), null, ind);
+    }
+
+    container.appendChild(el("div",{class:"stack"},[
+      el("div",{class:"field"},[el("label",{},["JSON sursă"]), input]),
+      status, note,
+      el("div",{class:"row"},[
+        el("div",{class:"field", style:"max-width:160px;"},[el("label",{},["Indentare"]), indentSel]),
+      ]),
+      el("div",{},[
+        el("button",{class:"btn primary", type:"button", onclick:format},["Formatează"]),
+        " ",
+        el("button",{class:"btn", type:"button", onclick:formatSorted},["Formatează + sortează chei"]),
+        " ",
+        el("button",{class:"btn", type:"button", onclick:minify},["Minifică"])
+      ]),
+      el("div",{class:"field"},[el("label",{},["Rezultat"]), output])
+    ]));
+    input.addEventListener("input", parseOrError);
+    parseOrError();
+  }
+});
+
+/* ===== MODULE: Diff Viewer ===== */
+MODULES.push({
+  id:"diff", cat:"dev", icon:"◈", name:"Diff Viewer",
+  inspired:["categoria dev — forje git (gitea, forgejo, gitlab) folosesc diff-uri de linie ca bază"],
+  render:function(container, ctx){
+    var el = ctx.el, escapeHtml = ctx.escapeHtml;
+    var left = el("textarea",{rows:"9"});
+    var right = el("textarea",{rows:"9"});
+    left.value = "linia unu\nlinia doi\nlinia trei\nlinia patru";
+    right.value = "linia unu\nlinia DOI modificata\nlinia trei\nlinia noua\nlinia patru";
+    var out = el("div",{class:"card", style:"padding:10px;"});
+    var stats = el("div",{class:"faint", style:"margin-top:8px;"});
+
+    function lcs(a, b){
+      var n = a.length, m = b.length;
+      var dp = new Array(n+1);
+      for(var i=0;i<=n;i++){ dp[i] = new Array(m+1).fill(0); }
+      for(i=n-1;i>=0;i--){
+        for(var j=m-1;j>=0;j--){
+          dp[i][j] = a[i]===b[j] ? dp[i+1][j+1]+1 : Math.max(dp[i+1][j], dp[i][j+1]);
+        }
+      }
+      var ops = [];
+      i=0; var j=0;
+      while(i<n && j<m){
+        if(a[i]===b[j]){ ops.push(["eq", a[i]]); i++; j++; }
+        else if(dp[i+1][j] >= dp[i][j+1]){ ops.push(["del", a[i]]); i++; }
+        else { ops.push(["add", b[j]]); j++; }
+      }
+      while(i<n){ ops.push(["del", a[i]]); i++; }
+      while(j<m){ ops.push(["add", b[j]]); j++; }
+      return ops;
+    }
+
+    function run(){
+      var a = left.value.split(/\r\n|\r|\n/);
+      var b = right.value.split(/\r\n|\r|\n/);
+      out.innerHTML = "";
+      if(a.length * b.length > 4000000){
+        stats.textContent = "Texte prea mari pentru comparare în browser (" + a.length + " × " + b.length + " linii; limita e 4 milioane de perechi).";
+        return;
+      }
+      var ops = lcs(a, b);
+      var added = 0, removed = 0;
+      ops.forEach(function(op){
+        var cls = op[0]==="add" ? "diff-add" : op[0]==="del" ? "diff-del" : "";
+        var prefix = op[0]==="add" ? "+ " : op[0]==="del" ? "- " : "  ";
+        if(op[0]==="add") added++;
+        if(op[0]==="del") removed++;
+        var div = el("div",{class:"diff-line" + (cls?" "+cls:"")}, [prefix + op[1]]);
+        out.appendChild(div);
+      });
+      stats.textContent = "+" + added + " adăugate, −" + removed + " șterse, " + (ops.length-added-removed) + " neschimbate";
+    }
+
+    container.appendChild(el("div",{class:"stack"},[
+      el("div",{class:"grid-2"},[
+        el("div",{class:"field"},[el("label",{},["Original"]), left]),
+        el("div",{class:"field"},[el("label",{},["Modificat"]), right])
+      ]),
+      el("button",{class:"btn primary", type:"button", onclick:run},["Compară"]),
+      stats,
+      el("div",{class:"field", style:"margin-top:6px;"},[el("label",{},["Diff pe linii"]), out])
+    ]));
+    run();
+  }
+});
+
+/* ===== MODULE: Hash & Encoding Lab ===== */
+MODULES.push({
+  id:"hash", cat:"dev", icon:"◈", name:"Hash & Encoding Lab",
+  inspired:["2fauth, adminer și categoria dev/system_tools — encodări și hash-uri text"],
+  render:function(container, ctx){
+    var el = ctx.el;
+    var input = el("textarea",{rows:"4"});
+    input.value = "Trusa fara frontiere";
+    var b64 = el("input",{type:"text", readonly:"readonly"});
+    var b64dec = el("input",{type:"text", placeholder:"lipește base64 aici pentru decodare"});
+    var b64decOut = el("div",{class:"faint", role:"status"});
+    var urlEnc = el("input",{type:"text", readonly:"readonly"});
+    var hexOut = el("input",{type:"text", readonly:"readonly"});
+    var shaBox = el("div",{class:"stack"});
+
+    function toBase64(str){
+      var bytes = new TextEncoder().encode(str);
+      var bin = "";
+      bytes.forEach(function(b){ bin += String.fromCharCode(b); });
+      return btoa(bin);
+    }
+    function toHex(str){
+      var bytes = new TextEncoder().encode(str);
+      return Array.from(bytes).map(function(b){ return b.toString(16).padStart(2,"0"); }).join("");
+    }
+    function bufToHex(buf){
+      return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,"0"); }).join("");
+    }
+
+    var hashToken = 0;
+    async function runHashes(text){
+      var token = ++hashToken;
+      shaBox.innerHTML = "";
+      if(!(window.crypto && window.crypto.subtle)){
+        shaBox.appendChild(el("div",{class:"faint"},["SHA indisponibil: Web Crypto cere un context sigur (HTTPS, localhost sau fișier local)."]));
+        return;
+      }
+      var algos = ["SHA-1","SHA-256","SHA-384","SHA-512"];
+      var enc = new TextEncoder().encode(text);
+      for(var i=0;i<algos.length;i++){
+        try{
+          var buf = await window.crypto.subtle.digest(algos[i], enc);
+          if(token !== hashToken) return; // a apărut un text mai nou; nu amesteca rezultatele
+          var row = el("div",{},[
+            el("span",{class:"pill"},[algos[i] + (algos[i]==="SHA-1" ? " (depășit)" : "")]), " ",
+            el("span",{class:"mono faint", style:"word-break:break-all;"},[bufToHex(buf)])
+          ]);
+          shaBox.appendChild(row);
+        }catch(e){
+          if(token === hashToken) shaBox.appendChild(el("div",{class:"no"},[algos[i] + ": eroare — " + e.message]));
+        }
+      }
+    }
+
+    function run(){
+      var text = input.value;
+      try{ b64.value = toBase64(text); }catch(e){ b64.value = "eroare: " + e.message; }
+      urlEnc.value = encodeURIComponent(text);
+      try{ hexOut.value = toHex(text); }catch(e){ hexOut.value = "eroare: " + e.message; }
+      runHashes(text);
+    }
+    function decodeB64(){
+      try{
+        var bin = atob(b64dec.value.trim());
+        var bytes = new Uint8Array(bin.length);
+        for(var i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
+        b64decOut.textContent = "→ " + new TextDecoder("utf-8", {fatal:true}).decode(bytes);
+      }catch(e){ b64decOut.textContent = "Base64 invalid."; }
+    }
+
+    container.appendChild(el("div",{class:"stack"},[
+      el("div",{class:"field"},[el("label",{},["Text sursă"]), input]),
+      el("div",{class:"field"},[el("label",{},["Base64"]), b64]),
+      el("div",{class:"field"},[el("label",{},["Decodează Base64 →"]), b64dec, b64decOut]),
+      el("div",{class:"field"},[el("label",{},["URL-encoded"]), urlEnc]),
+      el("div",{class:"field"},[el("label",{},["Hex"]), hexOut]),
+      el("div",{class:"field"},[el("label",{},["SHA (async, Web Crypto)"]), shaBox,
+        el("div",{class:"hint"},["SHA-1 este depășit criptografic. Aceste hash-uri rapide nu sunt potrivite pentru stocarea parolelor."])])
+    ]));
+    input.addEventListener("input", run);
+    b64dec.addEventListener("input", decodeB64);
+    run();
+  }
+});
+
+/* ===== MODULE: File Inspector ===== */
+MODULES.push({
+  id:"fileinspect", cat:"small_utilities", icon:"⌂", name:"Inspector de fișiere",
+  inspired:["subtag files, small_utilities — verificare rapidă de fișiere, checksum"],
+  render:function(container, ctx){
+    var el = ctx.el, fmtBytes = ctx.fmtBytes, fmtDate = ctx.fmtDate;
+    var input = el("input",{type:"file"});
+    var out = el("div",{class:"stack", style:"margin-top:12px;"});
+
+    function bufToHex(buf){
+      return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,"0"); }).join("");
+    }
+
+    input.addEventListener("change", function(){
+      out.innerHTML = "";
+      var f = input.files && input.files[0];
+      if(!f) return;
+      var meta = el("table",{},[
+        el("tr",{},[el("th",{},["Nume"]), el("td",{},[f.name])]),
+        el("tr",{},[el("th",{},["Dimensiune"]), el("td",{},[fmtBytes(f.size)])]),
+        el("tr",{},[el("th",{},["Tip MIME"]), el("td",{},[f.type || "necunoscut"])]),
+        el("tr",{},[el("th",{},["Ultima modificare"]), el("td",{},[f.lastModified ? fmtDate(f.lastModified) : "—"])])
+      ]);
+      out.appendChild(meta);
+
+      var reader = new FileReader();
+      var isText = /^text\//.test(f.type) || /\.(md|txt|json|csv|js|css|html|log|yml|yaml|toml)$/i.test(f.name);
+      var isImage = /^image\//.test(f.type);
+
+      if(isImage){
+        var url = URL.createObjectURL(f);
+        var img = el("img",{src:url, style:"max-width:220px; border-radius:8px; margin-top:10px; display:block;"});
+        img.alt = "Previzualizare " + f.name;
+        img.addEventListener("error", function(){ URL.revokeObjectURL(url); });
+        img.addEventListener("load", function(){
+          URL.revokeObjectURL(url);
+          out.appendChild(el("div",{class:"faint"},["Dimensiuni: " + img.naturalWidth + " × " + img.naturalHeight + " px"]));
+        });
+        out.appendChild(img);
+      } else if(isText){
+        reader.onload = function(){
+          var text = String(reader.result);
+          var lines = text.split(/\r\n|\r|\n/).length;
+          var words = (text.match(/\S+/g) || []).length;
+          out.appendChild(el("div",{class:"faint"},[
+            lines + " linii · " + words + " cuvinte · " + text.length + " caractere"
+          ]));
+          out.appendChild(el("pre",{class:"card mono", style:"max-height:180px; overflow:auto; font-size:12px;"},[
+            text.slice(0,2000) + (text.length>2000 ? "\n… (trunchiat)" : "")
+          ]));
+        };
+        reader.readAsText(f);
+      }
+
+      if(window.crypto && window.crypto.subtle){
+        var hashBox = el("div",{class:"faint"},["se calculează SHA-256…"]);
+        out.appendChild(hashBox);
+        var fr2 = new FileReader();
+        fr2.onload = function(){
+          window.crypto.subtle.digest("SHA-256", fr2.result).then(function(buf){
+            hashBox.innerHTML = "<span class='pill'>SHA-256</span> <span class='mono' style='word-break:break-all;'>" + bufToHex(buf) + "</span>";
+          }).catch(function(e){ hashBox.textContent = "eroare hash: " + e.message; });
+        };
+        fr2.readAsArrayBuffer(f);
+      }
+    });
+
+    container.appendChild(el("div",{class:"stack"},[
+      el("div",{class:"field"},[el("label",{},["Alege un fișier (rămâne local, nu se trimite nicăieri)"]), input]),
+      out
+    ]));
+  }
+});
+
+/* ===== MODULE: Password & Passphrase Generator ===== */
+MODULES.push({
+  id:"password", cat:"synchronization", icon:"⛁", name:"Generator parole",
+  inspired:["subtag password, synchronization — keeweb, vaultwarden, teampass, ots"],
+  render:function(container, ctx){
+    var el = ctx.el;
+    var WORDS = ["adanc","aer","albastru","ancora","apus","arici","astru","atlas","aur","artar",
+      "balon","bambus","banca","barza","bere","biroul","brad","brant","bujor","busola",
+      "cactus","calm","canion","carte","castel","catarg","cedru","cer","cerb","cetate",
+      "cifra","clopot","codru","colina","corn","cort","cosmos","creion","cristal","cuib",
+      "dans","delta","desen","dor","drum","dulap","dune","ecou","far","fereastra",
+      "flacara","floare","foc","foisor","forta","fum","furtuna","galaxie","gard","geam",
+      "gheata","glob","grau","gura","harta","hartie","iarba","iaz","insula","izvor",
+      "joc","jurnal","lac","lampa","liliac","liman","liniste","lumina","luna","lup",
+      "mac","mal","mare","masa","mesteacan","mreana","munte","muzica","nisip","nor",
+      "nucifer","ocean","oglinda","orizont","oras","padure","panza","parc","pasare","peste",
+      "piatra","pin","platan","pod","poiana","poteca","prun","punte","rachet","rasarit",
+      "rau","riu","roua","sat","sare","semn","soare","soim","spic","stanca",
+      "stea","stejar","stup","tabla","talaz","teren","tigva","toamna","trandafir","tunel",
+      "turn","umbra","unda","urcus","vale","valuri","vant","vapor","varf","vatra",
+      "vecin","vela","verde","vis","vulcan","zapada","zbor","zid","zimbru","zori"];
+
+    var lenInput = el("input",{type:"number", value:"16", min:"6", max:"128"});
+    var useLower = el("input",{type:"checkbox"}); useLower.checked = true;
+    var useUpper = el("input",{type:"checkbox"}); useUpper.checked = true;
+    var useDigits = el("input",{type:"checkbox"}); useDigits.checked = true;
+    var useSymbols = el("input",{type:"checkbox"}); useSymbols.checked = true;
+    var outPass = el("input",{type:"text", readonly:"readonly", class:"mono", "aria-label":"Parolă generată"});
+    var entropyPass = el("div",{class:"faint"});
+
+    var wordCount = el("input",{type:"number", value:"8", min:"3", max:"12"});
+    var outPhrase = el("input",{type:"text", readonly:"readonly", class:"mono", "aria-label":"Pasfrază generată"});
+    var entropyPhrase = el("div",{class:"faint"});
+
+    var hasCrypto = !!(window.crypto && window.crypto.getRandomValues);
+    function randInt(max){
+      // CSPRNG + rejection sampling (fără bias de modulo); fără rezervă pe Math.random.
+      var arr = new Uint32Array(1);
+      var limit = Math.floor(4294967296 / max) * max;
+      do{ window.crypto.getRandomValues(arr); }while(arr[0] >= limit);
+      return arr[0] % max;
+    }
+    function noCrypto(){
+      outPass.value = ""; outPhrase.value = "";
+      entropyPass.textContent = entropyPhrase.textContent = "Acest browser nu oferă crypto.getRandomValues; nu generez parole nesigure.";
+    }
+
+    function genPassword(){
+      if(!hasCrypto){ noCrypto(); return; }
+      var lower = "abcdefghijklmnopqrstuvwxyz", upper = lower.toUpperCase(), digits = "0123456789", symbols = "!@#$%^&*()-_=+[]{};:,.?";
+      var pool = "";
+      if(useLower.checked) pool += lower;
+      if(useUpper.checked) pool += upper;
+      if(useDigits.checked) pool += digits;
+      if(useSymbols.checked) pool += symbols;
+      if(!pool){ outPass.value = ""; entropyPass.textContent = "Bifează cel puțin un set de caractere."; return; }
+      var len = Math.max(6, Math.min(128, parseInt(lenInput.value,10) || 16));
+      var out = "";
+      for(var i=0;i<len;i++) out += pool[randInt(pool.length)];
+      outPass.value = out;
+      var bits = len * Math.log2(pool.length);
+      entropyPass.textContent = "≈ " + bits.toFixed(1) + " biți de entropie (set de " + pool.length + " caractere)";
+    }
+    function genPhrase(){
+      if(!hasCrypto){ noCrypto(); return; }
+      var n = Math.max(3, Math.min(12, parseInt(wordCount.value,10) || 8));
+      var out = [];
+      for(var i=0;i<n;i++) out.push(WORDS[randInt(WORDS.length)]);
+      outPhrase.value = out.join("-");
+      var bits = n * Math.log2(WORDS.length);
+      entropyPhrase.textContent = "≈ " + bits.toFixed(1) + " biți (listă de " + WORDS.length + " cuvinte, " + Math.log2(WORDS.length).toFixed(1) + " biți/cuvânt)" +
+        (bits < 64 ? " — slab pentru o parolă principală; folosește 10–12 cuvinte (≈ 72–86 biți) sau parola pe caractere." : "");
+    }
+
+    container.appendChild(el("div",{class:"grid-2"},[
+      el("div",{class:"card stack"},[
+        el("h3",{style:"margin:0; font-size:14px;"},["Parolă pe caractere"]),
+        el("div",{class:"row"},[
+          el("div",{class:"field"},[el("label",{},["Lungime"]), lenInput])
+        ]),
+        el("div",{},[
+          el("label",{style:"display:inline-flex;align-items:center;gap:5px;margin-right:10px;"},[useLower,"minuscule"]),
+          el("label",{style:"display:inline-flex;align-items:center;gap:5px;margin-right:10px;"},[useUpper,"MAJUSCULE"]),
+          el("label",{style:"display:inline-flex;align-items:center;gap:5px;margin-right:10px;"},[useDigits,"cifre"]),
+          el("label",{style:"display:inline-flex;align-items:center;gap:5px;"},[useSymbols,"simboluri"])
+        ]),
+        el("button",{class:"btn primary", type:"button", onclick:genPassword},["Generează"]),
+        el("div",{class:"field"},[el("label",{},["Rezultat"]), outPass]),
+        el("button",{class:"btn small", type:"button", onclick:function(){ ctx.copyText(outPass.value, this); }},["Copiază"]),
+        entropyPass
+      ]),
+      el("div",{class:"card stack"},[
+        el("h3",{style:"margin:0; font-size:14px;"},["Pasfrază (cuvinte RO)"]),
+        el("div",{class:"field"},[el("label",{},["Număr de cuvinte"]), wordCount]),
+        el("button",{class:"btn primary", type:"button", onclick:genPhrase},["Generează"]),
+        el("div",{class:"field"},[el("label",{},["Rezultat"]), outPhrase]),
+        el("button",{class:"btn small", type:"button", onclick:function(){ ctx.copyText(outPhrase.value, this); }},["Copiază"]),
+        entropyPhrase
+      ])
+    ]));
+    genPassword(); genPhrase();
+  }
+});
+
+/* ===== MODULE: Subnet / CIDR Calculator ===== */
+MODULES.push({
+  id:"subnet", cat:"system_tools", icon:"⌘", name:"Calculator subnet",
+  inspired:["categoria system_tools — administrare de rețea"],
+  render:function(container, ctx){
+    var el = ctx.el;
+    var ipInput = el("input",{type:"text", value:"192.168.1.10"});
+    var cidrInput = el("input",{type:"number", value:"24", min:"0", max:"32"});
+    var out = el("table",{});
+    var err = el("div",{class:"no", role:"alert"});
+
+    function ipToInt(ip){
+      var t = ip.trim();
+      if(!/^\d{1,3}(\.\d{1,3}){3}$/.test(t)) return null;
+      var parts = t.split(".").map(Number);
+      if(parts.some(function(p){ return p>255; })) return null;
+      return ((parts[0]<<24) | (parts[1]<<16) | (parts[2]<<8) | parts[3]) >>> 0;
+    }
+    function intToIp(n){ return [(n>>>24)&255,(n>>>16)&255,(n>>>8)&255,n&255].join("."); }
+
+    function run(){
+      err.textContent = "";
+      out.innerHTML = "";
+      var ipInt = ipToInt(ipInput.value);
+      var cidr = /^\d{1,2}$/.test(cidrInput.value.trim()) ? parseInt(cidrInput.value, 10) : NaN;
+      if(ipInt === null){ err.textContent = "IP invalid."; return; }
+      if(isNaN(cidr) || cidr<0 || cidr>32){ err.textContent = "CIDR trebuie să fie între 0 și 32."; return; }
+      var maskInt = cidr === 0 ? 0 : (0xFFFFFFFF << (32-cidr)) >>> 0;
+      var network = (ipInt & maskInt) >>> 0;
+      var broadcast = (network | (~maskInt >>> 0)) >>> 0;
+      var total = Math.pow(2, 32-cidr);
+      var usableFirst, usableLast, usableCount;
+      if(cidr >= 31){ usableFirst = network; usableLast = broadcast; usableCount = total; }
+      else { usableFirst = network+1; usableLast = broadcast-1; usableCount = total-2; }
+      var rows = [
+        ["Adresă rețea", intToIp(network)],
+        ["Broadcast", intToIp(broadcast)],
+        ["Mască rețea", intToIp(maskInt)],
+        ["Mască inversă (wildcard)", intToIp((~maskInt)>>>0)],
+        ["Interval utilizabil", intToIp(usableFirst) + " – " + intToIp(usableLast)],
+        ["Total adrese", String(total)],
+        ["Gazde utilizabile", String(Math.max(0,usableCount))]
+      ];
+      rows.forEach(function(r){
+        out.appendChild(el("tr",{},[el("th",{},[r[0]]), el("td",{class:"mono"},[r[1]])]));
+      });
+    }
+
+    container.appendChild(el("div",{class:"stack"},[
+      el("div",{class:"row"},[
+        el("div",{class:"field"},[el("label",{},["Adresă IP"]), ipInput]),
+        el("div",{class:"field"},[el("label",{},["CIDR (/0–/32)"]), cidrInput])
+      ]),
+      err, out
+    ]));
+    ipInput.addEventListener("input", run);
+    cidrInput.addEventListener("input", run);
+    run();
+  }
+});
+
+/* ===== MODULE: Unit Converter ===== */
+MODULES.push({
+  id:"units", cat:"small_utilities", icon:"⌂", name:"Convertor de unități",
+  inspired:["categoria small_utilities — utilitare rapide de zi cu zi"],
+  render:function(container, ctx){
+    var el = ctx.el;
+    var GROUPS = {
+      lungime: { units:{ mm:0.001, cm:0.01, m:1, km:1000, "in":0.0254, ft:0.3048, yd:0.9144, mi:1609.344 } },
+      masa: { units:{ mg:0.000001, g:0.001, kg:1, t:1000, oz:0.028349523125, lb:0.45359237 } },
+      volum: { units:{ ml:0.001, l:1, "m3":1000, cupUS:0.2365882365, galUS:3.785411784 } },
+      date: { units:{ B:1, KB:1024, MB:1048576, GB:1073741824, TB:1099511627776 } },
+      temperatura: { units:{ C:null, F:null, K:null } }
+    };
+    var groupSel = el("select",{}, Object.keys(GROUPS).map(function(g){ return el("option",{value:g},[g === "date" ? "date digitale (octeți)" : g]); }));
+    var fromSel = el("select",{});
+    var toSel = el("select",{});
+    var valueInput = el("input",{type:"number", value:"1"});
+    var result = el("div",{class:"card mono", role:"status", style:"font-size:15px;"});
+
+    function fillUnitSelects(){
+      var g = groupSel.value;
+      var units = Object.keys(GROUPS[g].units);
+      fromSel.innerHTML = ""; toSel.innerHTML = "";
+      units.forEach(function(u){
+        fromSel.appendChild(el("option",{value:u},[u]));
+        toSel.appendChild(el("option",{value:u},[u]));
+      });
+      if(units.length > 1) toSel.selectedIndex = 1;
+      run();
+    }
+    function convertTemp(v, from, to){
+      var c;
+      if(from==="C") c = v; else if(from==="F") c = (v-32)*5/9; else c = v-273.15;
+      if(to==="C") return c; if(to==="F") return c*9/5+32; return c+273.15;
+    }
+    function run(){
+      var g = groupSel.value;
+      var v = parseFloat(valueInput.value);
+      if(isNaN(v)){ result.textContent = "valoare invalidă"; return; }
+      var out;
+      if(g === "temperatura"){
+        out = convertTemp(v, fromSel.value, toSel.value);
+      } else {
+        var units = GROUPS[g].units;
+        out = v * units[fromSel.value] / units[toSel.value];
+      }
+      var shown = Number(out.toPrecision(10)); // 10 cifre semnificative; nu rotunjește valorile mici la 0
+      result.textContent = v + " " + fromSel.value + " = " + shown + " " + toSel.value;
+    }
+    groupSel.addEventListener("change", fillUnitSelects);
+    fromSel.addEventListener("change", run);
+    toSel.addEventListener("change", run);
+    valueInput.addEventListener("input", run);
+
+    container.appendChild(el("div",{class:"stack"},[
+      el("div",{class:"row"},[
+        el("div",{class:"field"},[el("label",{},["Categorie"]), groupSel]),
+        el("div",{class:"field"},[el("label",{},["Valoare"]), valueInput])
+      ]),
+      el("div",{class:"row"},[
+        el("div",{class:"field"},[el("label",{},["Din"]), fromSel]),
+        el("div",{class:"field"},[el("label",{},["În"]), toSel])
+      ]),
+      result
+    ]));
+    fillUnitSelects();
+  }
+});
+
+/* ===== MODULE: Markdown Notebook ===== */
+MODULES.push({
+  id:"notebook", cat:"office", icon:"▤", name:"Notebook Markdown",
+  inspired:["subtag text, office — codimd, hedgedoc, etherpad, joplin"],
+  render:function(container, ctx){
+    var el = ctx.el, escapeHtml = ctx.escapeHtml, safeStorage = ctx.safeStorage, uid = ctx.uid;
+    var notes = safeStorage.getArray("notebook", null);
+    if(notes) notes = notes.filter(function(n){ return n && typeof n === "object" && n.id; }).map(function(n){ return {id:String(n.id), title:String(n.title||""), body:String(n.body||"")}; });
+    if(!notes || !notes.length){
+      notes = [{id:uid(), title:"Bun venit", body:"# Notebook Markdown\n\nScrie **markdown** aici.\n\n- suportă liste\n- `cod inline`\n- [linkuri](https://example.com)\n\n> citat\n"}];
+    }
+    var activeNoteId = notes[0].id;
+
+    function save(){ safeStorage.set("notebook", notes); }
+    function mdToHtml(md){
+      var lines = md.split("\n");
+      var out = [], inList = false, inCode = false, codeBuf = [];
+      function inline(s){
+        s = escapeHtml(s);
+        s = s.replace(/`([^`]+)`/g, "<code>$1</code>");
+        s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+        s = s.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+        s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(_, t, href){
+          var ok = /^(https?:|mailto:)/i.test(href);
+          if(!ok) return "<a href=\"#\">" + t + "</a>";
+          return "<a href=\"" + href + "\" target=\"_blank\" rel=\"noopener noreferrer\">" + t + "</a>";
+        });
+        return s;
+      }
+      lines.forEach(function(line){
+        if(/^```/.test(line)){
+          if(!inCode){ inCode = true; codeBuf = []; }
+          else { inCode = false; out.push("<pre class='mono card'>" + escapeHtml(codeBuf.join("\n")) + "</pre>"); }
+          return;
+        }
+        if(inCode){ codeBuf.push(line); return; }
+        var m;
+        if(/^\s*$/.test(line)){ if(inList){ out.push("</ul>"); inList=false; } return; }
+        if((m = /^(#{1,6})\s+(.*)$/.exec(line))){
+          if(inList){ out.push("</ul>"); inList=false; }
+          out.push("<h" + m[1].length + ">" + inline(m[2]) + "</h" + m[1].length + ">");
+          return;
+        }
+        if(/^>\s?/.test(line)){
+          if(inList){ out.push("</ul>"); inList=false; }
+          out.push("<blockquote>" + inline(line.replace(/^>\s?/,"")) + "</blockquote>");
+          return;
+        }
+        if((m = /^[-*]\s+(.*)$/.exec(line))){
+          if(!inList){ out.push("<ul>"); inList=true; }
+          out.push("<li>" + inline(m[1]) + "</li>");
+          return;
+        }
+        if(inList){ out.push("</ul>"); inList=false; }
+        out.push("<p>" + inline(line) + "</p>");
+      });
+      if(inList) out.push("</ul>");
+      if(inCode) out.push("<pre class='mono card'>" + escapeHtml(codeBuf.join("\n")) + "</pre>");
+      return out.join("\n");
+    }
+
+    var list = el("div",{role:"group", "aria-label":"Notițe"});
+    var titleInput = el("input",{type:"text"});
+    var editor = el("textarea",{rows:"14"});
+    var preview = el("div",{class:"card", style:"overflow:auto; max-height:420px;", "aria-live":"off"});
+
+    function renderList(){
+      list.innerHTML = "";
+      notes.forEach(function(n){
+        var item = el("div",{class:"note-item" + (n.id===activeNoteId?" active":""), role:"button", tabindex:"0"},[n.title || "(fără titlu)"]);
+        if(n.id===activeNoteId) item.setAttribute("aria-current","true");
+        function pick(){ activeNoteId = n.id; loadNote(); renderList(); var again = list.querySelector("[aria-current]"); if(again) again.focus(); }
+        item.addEventListener("click", pick);
+        item.addEventListener("keydown", function(ev){ if(ev.key==="Enter" || ev.key===" "){ ev.preventDefault(); pick(); } });
+        list.appendChild(item);
+      });
+    }
+    function loadNote(){
+      var n = notes.filter(function(x){ return x.id===activeNoteId; })[0];
+      if(!n) return;
+      titleInput.value = n.title;
+      editor.value = n.body;
+      preview.innerHTML = mdToHtml(n.body);
+    }
+    function updateActive(){
+      var n = notes.filter(function(x){ return x.id===activeNoteId; })[0];
+      if(!n) return;
+      n.title = titleInput.value;
+      n.body = editor.value;
+      preview.innerHTML = mdToHtml(n.body);
+      save();
+      renderList();
+    }
+    function addNote(){
+      var n = {id:uid(), title:"Notă nouă", body:""};
+      notes.push(n);
+      activeNoteId = n.id;
+      save(); renderList(); loadNote();
+    }
+    function deleteNote(){
+      if(notes.length <= 1) return;
+      if(!window.confirm("Ștergi nota selectată? Acțiunea nu poate fi anulată.")) return;
+      notes = notes.filter(function(x){ return x.id !== activeNoteId; });
+      activeNoteId = notes[0].id;
+      save(); renderList(); loadNote();
+    }
+
+    container.appendChild(el("div",{class:"notebook-layout"},[
+      el("div",{},[
+        el("button",{class:"btn small primary", type:"button", onclick:addNote, style:"width:100%; margin-bottom:8px;"},["+ Notă nouă"]),
+        list
+      ]),
+      el("div",{class:"stack"},[
+        el("div",{class:"row"},[
+          el("div",{class:"field", style:"flex:3;"},[el("label",{},["Titlu"]), titleInput]),
+          el("div",{style:"flex:1; display:flex; align-items:flex-end;"},[
+            el("button",{class:"btn danger small", type:"button", onclick:deleteNote},["Șterge nota"])
+          ])
+        ]),
+        el("div",{class:"grid-2"},[
+          el("div",{class:"field"},[el("label",{},["Markdown"]), editor]),
+          el("div",{class:"field"},[el("label",{},["Previzualizare"]), preview])
+        ])
+      ])
+    ]));
+    renderList(); loadNote();
+    titleInput.addEventListener("input", updateActive);
+    editor.addEventListener("input", updateActive);
+  }
+});
+
+/* ===== MODULE: Mini Spreadsheet ===== */
+MODULES.push({
+  id:"spreadsheet", cat:"office", icon:"▤", name:"Mini foaie de calcul",
+  inspired:["subtag spreadsheet, office — grist, onlyoffice, collabora, cryptpad"],
+  render:function(container, ctx){
+    var el = ctx.el, safeStorage = ctx.safeStorage;
+    var COLS = 8, ROWS = 20;
+    var cellData = safeStorage.getObject("spreadsheet", {});
+    var inputs = {};
+
+    function tokenize(expr){
+      var tokens = [], i = 0;
+      while(i < expr.length){
+        var c = expr[i];
+        if(/\s/.test(c)){ i++; continue; }
+        if(/[0-9.]/.test(c)){
+          var j=i; while(j<expr.length && /[0-9.]/.test(expr[j])) j++;
+          tokens.push({t:"num", v:parseFloat(expr.slice(i,j))}); i=j; continue;
+        }
+        if(/[A-Za-z]/.test(c)){
+          var j2=i; while(j2<expr.length && /[A-Za-z0-9_]/.test(expr[j2])) j2++;
+          var word = expr.slice(i,j2);
+          if(expr[j2] === "("){ tokens.push({t:"func", v:word.toUpperCase()}); }
+          else { tokens.push({t:"ref", v:word.toUpperCase()}); }
+          i=j2; continue;
+        }
+        if("+-*/(),:".indexOf(c) !== -1){ tokens.push({t:"op", v:c}); i++; continue; }
+        throw new Error("caracter neașteptat: " + c);
+      }
+      return tokens;
+    }
+    function evalFormula(formula, getCell){
+      var tokens = tokenize(formula), pos = 0;
+      function peek(){ return tokens[pos]; }
+      function next(){ return tokens[pos++]; }
+      function expectOp(v){ var tk=next(); if(!tk||tk.t!=="op"||tk.v!==v) throw new Error("aștept '"+v+"'"); }
+      function colRowFromRef(ref){
+        var m = /^([A-Za-z]+)(\d+)$/.exec(ref);
+        if(!m) throw new Error("referință invalidă: " + ref);
+        return { col: m[1].toUpperCase().charCodeAt(0)-65, row: parseInt(m[2],10)-1 };
+      }
+      function checkRef(ref){
+        var m = /^([A-Z])(\d+)$/.exec(ref);
+        if(!m || m[1].charCodeAt(0)-65 >= COLS || parseInt(m[2],10) < 1 || parseInt(m[2],10) > ROWS) throw new Error("#REF!");
+      }
+      // valoare numerică a unei celule, sau null dacă e goală/text (erorile se propagă)
+      function cellNum(ref){
+        checkRef(ref);
+        var v = getCell(ref);
+        if(typeof v === "string" && v.charAt(0) === "#") throw new Error(v);
+        if(v === "" || v === undefined) return null;
+        if(typeof v === "number") return isFinite(v) ? v : null;
+        var t = String(v).trim();
+        return /^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(t) ? parseFloat(t) : null;
+      }
+      function cellRefToValue(ref){
+        var n = cellNum(ref);
+        return n === null ? 0 : n;
+      }
+      function rangeValues(a,b){
+        var ca=colRowFromRef(a), cb=colRowFromRef(b);
+        var c0=Math.min(ca.col,cb.col), c1=Math.max(ca.col,cb.col);
+        var r0=Math.min(ca.row,cb.row), r1=Math.max(ca.row,cb.row);
+        var vals=[];
+        for(var r=r0;r<=r1;r++) for(var c=c0;c<=c1;c++){
+          var nv = cellNum(String.fromCharCode(65+c)+(r+1));
+          if(nv !== null) vals.push(nv); // ca în foile de calcul obișnuite: celulele goale/text nu intră în AVG/MIN/MAX/COUNT
+        }
+        return vals;
+      }
+      function parseRange(){
+        var startTk = next();
+        if(!startTk || startTk.t!=="ref") throw new Error("aștept referință celulă");
+        if(peek() && peek().t==="op" && peek().v===":"){
+          next();
+          var endTk = next();
+          if(!endTk || endTk.t!=="ref") throw new Error("aștept referință celulă");
+          return rangeValues(startTk.v, endTk.v);
+        }
+        var single = cellNum(startTk.v);
+        return single === null ? [] : [single];
+      }
+      function applyFunc(name, vals){
+        if(name==="SUM") return vals.reduce(function(a,b){return a+b;},0);
+        if(name==="AVG"||name==="AVERAGE") return vals.reduce(function(a,b){return a+b;},0)/(vals.length||1);
+        if(name==="MIN") return vals.length ? Math.min.apply(null, vals) : 0;
+        if(name==="MAX") return vals.length ? Math.max.apply(null, vals) : 0;
+        if(name==="COUNT") return vals.length;
+        throw new Error("funcție necunoscută: " + name);
+      }
+      function parseFactor(){
+        var tk = peek();
+        if(!tk) throw new Error("expresie incompletă");
+        if(tk.t==="op" && tk.v==="-"){ next(); return -parseFactor(); }
+        if(tk.t==="op" && tk.v==="("){ next(); var v=parseExpr(); expectOp(")"); return v; }
+        if(tk.t==="num"){ next(); return tk.v; }
+        if(tk.t==="ref"){ next(); return cellRefToValue(tk.v); }
+        if(tk.t==="func"){ next(); expectOp("("); var r=parseRange(); expectOp(")"); return applyFunc(tk.v, r); }
+        throw new Error("token neașteptat");
+      }
+      function parseTerm(){
+        var v = parseFactor();
+        while(peek() && peek().t==="op" && (peek().v==="*"||peek().v==="/")){
+          var op = next().v; var rhs = parseFactor();
+          if(op==="/" && rhs === 0) throw new Error("#DIV/0!");
+          v = op==="*" ? v*rhs : v/rhs;
+        }
+        return v;
+      }
+      function parseExpr(){
+        var v = parseTerm();
+        while(peek() && peek().t==="op" && (peek().v==="+"||peek().v==="-")){
+          var op = next().v; var rhs = parseTerm();
+          v = op==="+" ? v+rhs : v-rhs;
+        }
+        return v;
+      }
+      var result = parseExpr();
+      if(pos < tokens.length) throw new Error("expresie incompletă sau în exces");
+      return isFinite(result) ? Number(result.toPrecision(12)) : "#NUM!";
+    }
+
+    var evaluating = {};
+    function getCellValue(ref){
+      if(evaluating[ref]) return "#CIRC";
+      var raw = cellData[ref];
+      if(raw === undefined || raw === "") return "";
+      if(String(raw)[0] === "="){
+        evaluating[ref] = true;
+        var v;
+        try{ v = evalFormula(String(raw).slice(1), getCellValue); }
+        catch(e){ v = /^#[A-Z\/0!?]+$/.test(e.message) ? e.message : "#ERR"; }
+        evaluating[ref] = false;
+        return v;
+      }
+      return raw;
+    }
+
+    function recalcAll(){
+      for(var c=0;c<COLS;c++) for(var r=0;r<ROWS;r++){
+        var ref = String.fromCharCode(65+c) + (r+1);
+        var input = inputs[ref];
+        if(!input) continue;
+        if(document.activeElement === input) continue; // don't clobber what's being typed
+        var raw = cellData[ref];
+        if(raw !== undefined && String(raw)[0] === "="){
+          input.value = String(getCellValue(ref));
+          input.title = "= " + String(raw).slice(1);
+        } else {
+          input.value = raw === undefined ? "" : raw;
+          input.removeAttribute("title");
+        }
+      }
+    }
+
+    var table = el("table",{class:"ss-grid"});
+    var headRow = el("tr",{},[el("th",{},[""])]);
+    for(var c=0;c<COLS;c++) headRow.appendChild(el("th",{},[String.fromCharCode(65+c)]));
+    table.appendChild(headRow);
+    for(var r=0;r<ROWS;r++){
+      var tr = el("tr",{},[el("th",{},[String(r+1)])]);
+      for(var cc=0;cc<COLS;cc++){
+        var ref = String.fromCharCode(65+cc) + (r+1);
+        var input = el("input",{type:"text", "aria-label":"Celula " + ref});
+        (function(thisRef){
+          input.addEventListener("focus", function(ev){
+            var raw = cellData[thisRef];
+            ev.target.value = raw === undefined ? "" : raw;
+          });
+          input.addEventListener("change", function(ev){
+            cellData[thisRef] = ev.target.value;
+            safeStorage.set("spreadsheet", cellData);
+            recalcAll(true);
+          });
+          input.addEventListener("blur", function(){ recalcAll(); });
+        })(ref);
+        inputs[ref] = input;
+        tr.appendChild(el("td",{},[input]));
+      }
+      table.appendChild(tr);
+    }
+
+    container.appendChild(el("div",{class:"stack"},[
+      el("div",{class:"faint"},["Formule: =A1+B2, =SUM(A1:A5), =AVG(...), =MIN(...), =MAX(...), =COUNT(...). Coloane A–H, rânduri 1–20. AVG/MIN/MAX/COUNT ignoră celulele goale sau text. Scrie direct în celulă, apoi Tab/Enter."]),
+      el("div",{style:"overflow-x:auto;"},[table]),
+      el("button",{class:"btn small", type:"button", onclick:function(){ if(!window.confirm("Golești toată foaia? Acțiunea nu poate fi anulată.")) return; cellData = {}; safeStorage.set("spreadsheet", cellData); recalcAll(); }},["Golește foaia"])
+    ]));
+    recalcAll();
+  }
+});
+
+/* ===== MODULE: Mindmap Canvas ===== */
+MODULES.push({
+  id:"mindmap", cat:"office", icon:"▤", name:"Hartă mentală",
+  inspired:["subtag mindmap, office — my-mind"],
+  render:function(container, ctx){
+    var el = ctx.el, safeStorage = ctx.safeStorage, uid = ctx.uid;
+    var svgNS = "http://www.w3.org/2000/svg";
+    var state = safeStorage.getObject("mindmap", null);
+    if(state && Array.isArray(state.nodes) && Array.isArray(state.edges)){
+      state.nodes = state.nodes.filter(function(n){ return n && n.id && isFinite(n.x) && isFinite(n.y); }).map(function(n){ return {id:String(n.id), x:+n.x, y:+n.y, label:String(n.label==null?"":n.label)}; });
+      state.edges = state.edges.filter(function(e){ return e && e.from && e.to; });
+    } else { state = null; }
+    if(!state || !state.nodes.length){
+      state = { nodes:[{id:uid(), x:260, y:160, label:"Idee centrală"}], edges:[] };
+    }
+    var selectedId = state.nodes[0] ? state.nodes[0].id : null;
+    var draggingId = null;
+    var connectMode = false;
+    var connectFirst = null;
+
+    var svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", "0 0 560 340");
+    svg.setAttribute("width", "100%");
+    svg.style.background = "var(--bg-card)";
+    svg.style.border = "1px solid var(--border)";
+    svg.style.borderRadius = "10px";
+    svg.style.height = "340px";
+    svg.style.touchAction = "none";
+    svg.setAttribute("role", "group");
+    svg.setAttribute("aria-label", "Hartă mentală. Nodurile se pot muta cu mouse-ul, degetul sau cu tastele săgeți după ce sunt selectate cu Tab.");
+
+    var labelInput = el("input",{type:"text"});
+    var connectBtn = el("button",{class:"btn small", type:"button", "aria-pressed":"false"},["Leagă noduri"]);
+    var status = el("div",{class:"faint", role:"status"});
+
+    function save(){ safeStorage.set("mindmap", state); }
+    function findNode(id){ return state.nodes.filter(function(n){ return n.id===id; })[0]; }
+
+    function draw(){
+      svg.innerHTML = "";
+      state.edges.forEach(function(e){
+        var a = findNode(e.from), b = findNode(e.to);
+        if(!a || !b) return;
+        var line = document.createElementNS(svgNS,"line");
+        line.setAttribute("x1", a.x); line.setAttribute("y1", a.y);
+        line.setAttribute("x2", b.x); line.setAttribute("y2", b.y);
+        line.setAttribute("stroke", "#7a72f2"); line.setAttribute("stroke-width","2"); line.setAttribute("opacity","0.55");
+        svg.appendChild(line);
+      });
+      state.nodes.forEach(function(n){
+        var g = document.createElementNS(svgNS,"g");
+        g.setAttribute("data-node-id", n.id);
+        g.setAttribute("tabindex", "0");
+        g.setAttribute("role", "button");
+        g.setAttribute("aria-label", "Nod: " + (n.label || "fără etichetă") + (n.id===selectedId ? " (selectat)" : ""));
+        g.style.cursor = "grab";
+        var circle = document.createElementNS(svgNS,"circle");
+        circle.setAttribute("cx", n.x); circle.setAttribute("cy", n.y); circle.setAttribute("r","36");
+        circle.style.fill = n.id===selectedId ? "var(--accent-fill)" : "var(--bg-elevated)";
+        circle.setAttribute("stroke","#7a72f2"); circle.setAttribute("stroke-width","2");
+        var text = document.createElementNS(svgNS,"text");
+        text.setAttribute("x", n.x); text.setAttribute("y", n.y+4);
+        text.setAttribute("text-anchor","middle"); text.setAttribute("font-size","11");
+        text.style.fill = n.id===selectedId ? "#ffffff" : "var(--text)";
+        text.textContent = n.label.length>11 ? n.label.slice(0,10)+"…" : n.label;
+        g.appendChild(circle); g.appendChild(text);
+        function activate(){
+          if(connectMode){
+            if(connectFirst == null){ connectFirst = n.id; status.textContent = "Ales: " + n.label + " — alege al doilea nod."; }
+            else if(connectFirst !== n.id){
+              var dup = state.edges.some(function(e){ return (e.from===connectFirst && e.to===n.id) || (e.from===n.id && e.to===connectFirst); });
+              if(!dup) state.edges.push({from:connectFirst, to:n.id});
+              connectFirst = null; connectMode = false; connectBtn.classList.remove("primary");
+              status.textContent = "Legătură creată.";
+              save(); draw();
+            }
+          } else {
+            draggingId = n.id;
+            selectedId = n.id;
+            labelInput.value = n.label;
+            draw();
+          }
+        }
+        g.addEventListener("pointerdown", function(ev){ ev.preventDefault(); activate(); });
+        g.addEventListener("keydown", function(ev){
+          var step = ev.shiftKey ? 30 : 10, moved = true;
+          if(ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); activate(); draggingId = null; refocus(n.id); return; }
+          if(ev.key === "ArrowLeft") n.x = Math.max(36, n.x - step);
+          else if(ev.key === "ArrowRight") n.x = Math.min(524, n.x + step);
+          else if(ev.key === "ArrowUp") n.y = Math.max(36, n.y - step);
+          else if(ev.key === "ArrowDown") n.y = Math.min(304, n.y + step);
+          else moved = false;
+          if(moved){ ev.preventDefault(); selectedId = n.id; labelInput.value = n.label; save(); draw(); refocus(n.id); }
+        });
+        svg.appendChild(g);
+      });
+    }
+    function refocus(id){
+      var g = svg.querySelector('[data-node-id="' + id + '"]');
+      if(g) g.focus();
+    }
+    svg.addEventListener("pointermove", function(ev){
+      if(draggingId == null) return;
+      var rect = svg.getBoundingClientRect();
+      var vb = svg.viewBox.baseVal;
+      var scaleX = (vb && vb.width) ? vb.width / (rect.width||1) : 1;
+      var scaleY = (vb && vb.height) ? vb.height / (rect.height||1) : 1;
+      var node = findNode(draggingId);
+      if(node){
+        node.x = Math.max(36, Math.min(524, (ev.clientX - rect.left) * scaleX));
+        node.y = Math.max(36, Math.min(304, (ev.clientY - rect.top) * scaleY));
+        draw();
+      }
+    });
+    function endDrag(){ if(draggingId!=null){ save(); } draggingId = null; }
+    svg.addEventListener("pointerup", endDrag);
+    svg.addEventListener("pointercancel", endDrag);
+    svg.addEventListener("pointerleave", endDrag);
+
+    function addNode(){
+      var rnd = new Uint32Array(2);
+      (window.crypto && window.crypto.getRandomValues) ? window.crypto.getRandomValues(rnd) : (rnd[0] = Date.now(), rnd[1] = Date.now() >>> 3);
+      var n = {id:uid(), x: 80 + (rnd[0] % 380), y: 60 + (rnd[1] % 220), label:"Nod nou"};
+      state.nodes.push(n);
+      selectedId = n.id; labelInput.value = n.label;
+      save(); draw();
+    }
+    function deleteSelected(){
+      if(!selectedId) return;
+      if(!window.confirm("Ștergi nodul selectat și legăturile lui?")) return;
+      state.nodes = state.nodes.filter(function(n){ return n.id !== selectedId; });
+      state.edges = state.edges.filter(function(e){ return e.from!==selectedId && e.to!==selectedId; });
+      selectedId = state.nodes.length ? state.nodes[0].id : null;
+      labelInput.value = selectedId ? findNode(selectedId).label : "";
+      save(); draw();
+    }
+    labelInput.addEventListener("input", function(){
+      if(!selectedId) return;
+      var n = findNode(selectedId);
+      if(n){ n.label = labelInput.value; save(); draw(); }
+    });
+    connectBtn.addEventListener("click", function(){
+      connectMode = !connectMode;
+      connectFirst = null;
+      connectBtn.classList.toggle("primary", connectMode);
+      connectBtn.setAttribute("aria-pressed", connectMode ? "true" : "false");
+      status.textContent = connectMode ? "Mod legătură: alege două noduri." : "";
+    });
+
+    container.appendChild(el("div",{class:"stack"},[
+      el("div",{class:"row"},[
+        el("button",{class:"btn primary small", type:"button", onclick:addNode},["+ Nod"]),
+        connectBtn,
+        el("button",{class:"btn danger small", type:"button", onclick:deleteSelected},["Șterge nodul selectat"])
+      ]),
+      el("div",{class:"field", style:"max-width:320px;"},[el("label",{},["Etichetă nod selectat"]), labelInput]),
+      el("div",{class:"hint"},["Trage nodurile cu mouse-ul sau degetul; cu tastatura: Tab până la un nod, apoi tastele săgeți (Shift = pas mare)."]),
+      status,
+      svg
+    ]));
+    if(selectedId) labelInput.value = findNode(selectedId).label;
+    draw();
+  }
+});
+
+/* ===== MODULE: Kanban Board ===== */
+MODULES.push({
+  id:"kanban", cat:"productivity_and_management", icon:"▦", name:"Panou Kanban",
+  inspired:["subtag task, productivity_and_management — kanboard, focalboard, dumbkan, nullboard"],
+  render:function(container, ctx){
+    var el = ctx.el, safeStorage = ctx.safeStorage, uid = ctx.uid;
+    var COLS = [
+      {id:"todo", label:"De făcut"},
+      {id:"doing", label:"În lucru"},
+      {id:"done", label:"Gata"}
+    ];
+    var cards = safeStorage.getArray("kanban", null);
+    if(cards) cards = cards.filter(function(c){ return c && c.id && ["todo","doing","done"].indexOf(c.col) !== -1; }).map(function(c){ return {id:String(c.id), col:c.col, text:String(c.text==null?"":c.text)}; });
+    if(!cards || !cards.length) cards = [
+      {id:uid(), col:"todo", text:"Mută un card cu butoanele ›/‹"}
+    ];
+    function save(){ safeStorage.set("kanban", cards); }
+
+    var colsWrap = el("div",{class:"kanban-cols"});
+    var newCardInputs = {};
+
+    function renderBoard(){
+      colsWrap.innerHTML = "";
+      COLS.forEach(function(col, colIdx){
+        var colCards = cards.filter(function(c){ return c.col === col.id; });
+        var colBox = el("div",{},[
+          el("h2",{style:"font-family:var(--mono); font-size:13px; margin:0 0 8px;"},[col.label + " (" + colCards.length + ")"])
+        ]);
+        colCards.forEach(function(c){
+          var moveLeft = colIdx>0 ? el("button",{class:"btn small", type:"button", onclick:function(){ c.col = COLS[colIdx-1].id; save(); renderBoard(); }, "aria-label":"Mută cardul în „" + COLS[colIdx-1].label + "”", title:"Mută în " + COLS[colIdx-1].label},["‹"]) : null;
+          var moveRight = colIdx<COLS.length-1 ? el("button",{class:"btn small", type:"button", onclick:function(){ c.col = COLS[colIdx+1].id; save(); renderBoard(); }, "aria-label":"Mută cardul în „" + COLS[colIdx+1].label + "”", title:"Mută în " + COLS[colIdx+1].label},["›"]) : null;
+          var del = el("button",{class:"btn danger small", type:"button", onclick:function(){ cards = cards.filter(function(x){return x.id!==c.id;}); save(); renderBoard(); }, "aria-label":"Șterge cardul „" + c.text.slice(0,40) + "”", title:"Șterge cardul"},["✕"]);
+          var actions = el("div",{class:"kc-actions"});
+          if(moveLeft) actions.appendChild(moveLeft);
+          if(moveRight) actions.appendChild(moveRight);
+          actions.appendChild(del);
+          colBox.appendChild(el("div",{class:"kanban-card"},[c.text, actions]));
+        });
+        var newInput = el("input",{type:"text", placeholder:"card nou…", "aria-label":"Card nou în coloana „" + col.label + "”"});
+        newCardInputs[col.id] = newInput;
+        newInput.addEventListener("keydown", function(ev){
+          if(ev.key === "Enter" && newInput.value.trim()){
+            cards.push({id:uid(), col:col.id, text:newInput.value.trim()});
+            newInput.value = "";
+            save(); renderBoard();
+          }
+        });
+        colBox.appendChild(newInput);
+        colsWrap.appendChild(colBox);
+      });
+    }
+    container.appendChild(el("div",{class:"stack"},[
+      el("div",{class:"faint"},["Adaugă card cu Enter în câmpul de sub fiecare coloană. Mută cu ‹ ›."]),
+      colsWrap
+    ]));
+    renderBoard();
+  }
+});
+
+/* ===== MODULE: Ledger / Budget Tracker ===== */
+MODULES.push({
+  id:"ledger", cat:"productivity_and_management", icon:"▦", name:"Jurnal financiar",
+  inspired:["subtag accounting, productivity_and_management — actual, firefly-iii, dumbbudget, ihatemoney"],
+  render:function(container, ctx){
+    var el = ctx.el, safeStorage = ctx.safeStorage, uid = ctx.uid;
+    var tx = safeStorage.getArray("ledger", []).filter(function(t){ return t && t.id && typeof t.amount === "number" && isFinite(t.amount); });
+    function save(){ safeStorage.set("ledger", tx); }
+
+    var dateInput = el("input",{type:"date"});
+    var descInput = el("input",{type:"text", placeholder:"descriere"});
+    var catInput = el("input",{type:"text", placeholder:"categorie"});
+    var amountInput = el("input",{type:"number", step:"0.01", placeholder:"sumă (negativ = cheltuială)"});
+    var table = el("table",{});
+    var summary = el("div",{class:"card mono", role:"status", style:"margin-top:10px; white-space:pre-wrap;"});
+
+    function fmtAmount(n){
+      var s = (Math.round(n*100)/100).toFixed(2);
+      return (n>=0?"+":"") + s;
+    }
+
+    function renderAll(){
+      table.innerHTML = "";
+      table.appendChild(el("tr",{},[
+        el("th",{},["Dată"]), el("th",{},["Descriere"]), el("th",{},["Categorie"]), el("th",{},["Sumă"]), el("th",{},[""])
+      ]));
+      var sorted = tx.slice().sort(function(a,b){ return (a.date||"").localeCompare(b.date||""); });
+      var running = 0;
+      var byCat = Object.create(null); // categorii precum "constructor" nu trebuie să lovească prototipul
+      sorted.forEach(function(t){
+        running = Math.round((running + t.amount) * 100) / 100;
+        byCat[t.cat||"altele"] = Math.round(((byCat[t.cat||"altele"]||0) + t.amount) * 100) / 100;
+        var del = el("button",{class:"btn danger small", type:"button", onclick:function(){ tx = tx.filter(function(x){return x.id!==t.id;}); save(); renderAll(); }, "aria-label":"Șterge tranzacția „" + (t.desc||t.cat||t.date||"") + "”", title:"Șterge tranzacția"},["✕"]);
+        var amtCell = el("td",{class: t.amount<0 ? "no mono" : "ok mono"},[fmtAmount(t.amount)]);
+        table.appendChild(el("tr",{},[
+          el("td",{},[t.date||"—"]), el("td",{},[t.desc||""]), el("td",{},[t.cat||"—"]), amtCell, el("td",{},[del])
+        ]));
+      });
+      var catLines = Object.keys(byCat).sort().map(function(k){ return k + ": " + fmtAmount(byCat[k]); }).join("\n");
+      summary.textContent = "Sold total: " + fmtAmount(running) + (catLines ? ("\n\nPe categorii:\n" + catLines) : "");
+    }
+    function addTx(){
+      var amt = parseFloat(amountInput.value);
+      if(isNaN(amt) || !isFinite(amt)) return;
+      tx.push({id:uid(), date:dateInput.value, desc:descInput.value, cat:catInput.value, amount:amt});
+      descInput.value = ""; catInput.value = ""; amountInput.value = "";
+      save(); renderAll();
+    }
+
+    container.appendChild(el("div",{class:"stack"},[
+      el("div",{class:"row"},[
+        el("div",{class:"field"},[el("label",{},["Dată"]), dateInput]),
+        el("div",{class:"field"},[el("label",{},["Descriere"]), descInput]),
+        el("div",{class:"field"},[el("label",{},["Categorie"]), catInput]),
+        el("div",{class:"field"},[el("label",{},["Sumă"]), amountInput])
+      ]),
+      el("button",{class:"btn primary", type:"button", onclick:addTx},["Adaugă tranzacție"]),
+      el("div",{style:"overflow-x:auto;"},[table]),
+      summary,
+      el("div",{class:"hint"},["Unealtă simplă de evidență personală, într-o singură monedă nespecificată; nu este software contabil. Datele sunt în acest browser (necriptate); folosește „export date” pentru copie de rezervă."])
+    ]));
+    renderAll();
+  }
+});
+
+/* ===== MODULE: RSS / Atom Reader ===== */
+MODULES.push({
+  id:"rssreader", cat:"reading", icon:"❧", name:"Cititor RSS/Atom",
+  inspired:["subtag rssreader, reading — miniflux, freshrss, commafeed, tinyfeed"],
+  render:function(container, ctx){
+    var el = ctx.el, escapeHtml = ctx.escapeHtml;
+    var fileInput = el("input",{type:"file", accept:".xml,.rss,.atom,text/xml,application/xml,application/rss+xml"});
+    var textArea = el("textarea",{rows:"6", placeholder:"…sau lipește direct conținutul XML al unui feed RSS/Atom aici"});
+    var out = el("div",{class:"stack", style:"margin-top:12px;"});
+    var err = el("div",{class:"no", role:"alert"});
+
+    function text(node, sel){
+      var n = node.querySelector(sel);
+      return n ? n.textContent.trim() : "";
+    }
+    function parseFeed(xmlStr){
+      err.textContent = ""; out.innerHTML = "";
+      var doc;
+      try{
+        doc = new DOMParser().parseFromString(xmlStr, "application/xml");
+        var perr = doc.querySelector("parsererror");
+        if(perr) throw new Error("XML invalid");
+      }catch(e){ err.textContent = "Nu pot parsa XML-ul: " + e.message; return; }
+
+      var items = [];
+      var rssItems = doc.querySelectorAll("item");
+      var atomEntries = doc.querySelectorAll("entry");
+      if(rssItems.length){
+        rssItems.forEach(function(it){
+          var link = text(it, "link");
+          items.push({ title: text(it,"title") || "(fără titlu)", link: link, date: text(it,"pubDate"), desc: text(it,"description") });
+        });
+      } else if(atomEntries.length){
+        atomEntries.forEach(function(en){
+          var linkEl = en.querySelector('link[rel="alternate"]') || en.querySelector("link:not([rel])") || en.querySelector("link");
+          var href = linkEl ? (linkEl.getAttribute("href")||"") : "";
+          items.push({ title: text(en,"title") || "(fără titlu)", link: href, date: text(en,"updated")||text(en,"published"), desc: text(en,"summary")||text(en,"content") });
+        });
+      }
+      if(!items.length){ err.textContent = "Niciun <item> sau <entry> găsit — verifică formatul feed-ului."; return; }
+      var feedTitle = text(doc, "channel > title") || text(doc, "feed > title") || "Feed";
+      out.appendChild(el("h3",{style:"font-family:var(--mono); font-size:14px;"},[feedTitle + " — " + items.length + " intrări"]));
+      items.forEach(function(it){
+        var safeHref = /^https?:/i.test(it.link) ? it.link : "#";
+        var card = el("div",{class:"card", style:"margin-bottom:8px;"},[
+          (safeHref === "#" ? el("strong",{},[it.title]) : el("a",{href:safeHref, target:"_blank", rel:"noopener noreferrer", style:"font-weight:600;"},[it.title])),
+          el("div",{class:"faint"},[it.date || ""]),
+          el("div",{style:"font-size:13px; margin-top:4px;"},[(it.desc||"").slice(0,300)])
+        ]);
+        out.appendChild(card);
+      });
+    }
+
+    fileInput.addEventListener("change", function(){
+      var f = fileInput.files && fileInput.files[0];
+      if(!f) return;
+      var reader = new FileReader();
+      if(f.size > 5*1024*1024){ err.textContent = "Fișier prea mare (peste 5 MB)."; return; }
+      reader.onload = function(){ textArea.value = String(reader.result); parseFeed(textArea.value); };
+      reader.onerror = function(){ err.textContent = "Nu am putut citi fișierul."; };
+      reader.readAsText(f);
+    });
+    var parseBtn = el("button",{class:"btn primary", type:"button", onclick:function(){ parseFeed(textArea.value); }},["Parsează"]);
+
+    container.appendChild(el("div",{class:"stack"},[
+      el("div",{class:"hint"},["Cititorul nu descarcă feed-uri de pe internet (nu face cereri de rețea): salvezi tu fișierul XML și îl încarci sau îl lipești aici. Textul din feed este afișat ca text simplu."]),
+      el("div",{class:"field"},[el("label",{},["Încarcă fișier .xml (rămâne local)"]), fileInput]),
+      el("div",{class:"field"},[el("label",{},["…sau lipește XML"]), textArea]),
+      parseBtn, err, out
+    ]));
+  }
+});
+
+/* ===== MODULE: Paste / Snippet Vault ===== */
+MODULES.push({
+  id:"paste", cat:"small_utilities", icon:"⌂", name:"Vault de fragmente",
+  inspired:["subtag pastebin, small_utilities — haste, privatebin, zerobin, microbin (local, fără partajare de rețea)"],
+  render:function(container, ctx){
+    var el = ctx.el, safeStorage = ctx.safeStorage, uid = ctx.uid, fmtDate = ctx.fmtDate;
+    var snippets = safeStorage.getArray("paste", []).filter(function(x){ return x && x.id && typeof x.body === "string"; });
+    function save(){ safeStorage.set("paste", snippets); }
+
+    var titleInput = el("input",{type:"text", placeholder:"titlu"});
+    var langInput = el("input",{type:"text", placeholder:"limbaj/etichetă (ex: bash, sql, notă)"});
+    var bodyInput = el("textarea",{rows:"6", placeholder:"conținut…"});
+    var list = el("div",{class:"stack"});
+
+    function renderList(){
+      list.innerHTML = "";
+      if(!snippets.length){ list.appendChild(el("div",{class:"faint"},["Nimic salvat încă."])); return; }
+      snippets.slice().reverse().forEach(function(s){
+        var del = el("button",{class:"btn danger small", type:"button", onclick:function(){ snippets = snippets.filter(function(x){return x.id!==s.id;}); save(); renderList(); }, "aria-label":"Șterge fragmentul „" + (s.title||"fără titlu") + "”"},["Șterge"]);
+var copyBtn = el("button",{class:"btn small", type:"button", onclick:function(){ ctx.copyText(s.body, this); }},["Copiază"]);
+        list.appendChild(el("div",{class:"card"},[
+          el("div",{style:"display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap;"},[
+            el("div",{},[el("strong",{},[s.title||"(fără titlu)"]), " ", el("span",{class:"pill"},[String(s.lang||"text")])]),
+            el("div",{},[copyBtn, " ", del])
+          ]),
+          el("pre",{class:"mono", style:"white-space:pre-wrap; font-size:12.5px; margin:8px 0 4px; max-height:200px; overflow:auto;"},[s.body]),
+          el("div",{class:"faint"},[s.ts ? fmtDate(s.ts) : ""])
+        ]));
+      });
+    }
+    function addSnippet(){
+      if(!bodyInput.value.trim()) return;
+      snippets.push({id:uid(), title:titleInput.value, lang:langInput.value, body:bodyInput.value, ts:Date.now()});
+      titleInput.value=""; langInput.value=""; bodyInput.value="";
+      save(); renderList();
+    }
+
+    container.appendChild(el("div",{class:"stack"},[
+      el("div",{class:"row"},[
+        el("div",{class:"field"},[el("label",{},["Titlu"]), titleInput]),
+        el("div",{class:"field"},[el("label",{},["Etichetă"]), langInput])
+      ]),
+      el("div",{class:"field"},[el("label",{},["Conținut"]), bodyInput]),
+      el("button",{class:"btn primary", type:"button", onclick:addSnippet},["Salvează local"]),
+      el("div",{class:"faint"},["Nu se trimite nicăieri — rămâne doar în acest browser, în clar (necriptat). Nu păstra aici parole sau chei private."]),
+      list
+    ]));
+    renderList();
+  }
+});
+
+/* === MODULE_INSERT_POINT === */
+
+/* ---------- shell wiring ---------- */
+var sidebar = document.getElementById("sidebar");
+var content = document.getElementById("content");
+var activeId = null;
+
+function renderSidebar(){
+  sidebar.innerHTML = "";
+  CAT_ORDER.forEach(function(cat){
+    var mods = MODULES.filter(function(m){ return m.cat === cat; });
+    if(!mods.length) return;
+    sidebar.appendChild(el("div", {class:"cat-label"}, [CAT_LABELS[cat] || cat]));
+    mods.forEach(function(m){
+      var btn = el("button", {
+        class: "mod-btn" + (m.id === activeId ? " active" : ""),
+        type: "button",
+        onclick: function(){ selectModule(m.id, true); closeMobileNav(); }
+      }, [
+        el("span", {class:"ic", "aria-hidden":"true"}, [m.icon || "◈"]),
+        el("span", {}, [m.name])
+      ]);
+      if(m.id === activeId) btn.setAttribute("aria-current", "page");
+      sidebar.appendChild(btn);
+    });
+  });
+}
+
+var labelSeq = 0;
+function associateLabels(root){
+  // Etichetele din module sunt frați ai controalelor; le legăm explicit (for/id) pentru cititoare de ecran și click pe etichetă.
+  root.querySelectorAll(".field").forEach(function(f){
+    var lab = f.querySelector(":scope > label");
+    var ctl = f.querySelector("input, textarea, select");
+    if(!lab || !ctl || lab.htmlFor || lab.contains(ctl)) return;
+    if(!ctl.id) ctl.id = "tff-c" + (++labelSeq);
+    lab.htmlFor = ctl.id;
+  });
+}
+function selectModule(id, userInitiated){
+  var mod = MODULES.filter(function(m){ return m.id === id; })[0];
+  if(!mod) return;
+  activeId = id;
+  renderSidebar();
+  content.innerHTML = "";
+  storageBanner();
+  var head = el("div", {class:"mod-head"}, [
+    el("h1", {}, [mod.icon + " " + mod.name]),
+    el("div", {class:"src"}, [
+      el("b", {}, ["categorie YunoHost: "]), mod.cat,
+      mod.inspired ? (" · inspirat de: " + mod.inspired.join(", ")) : ""
+    ])
+  ]);
+  content.appendChild(head);
+  var body = el("div", {class:"mod-body"});
+  content.appendChild(body);
+  try{
+    mod.render(body, {escapeHtml:escapeHtml, el:el, safeStorage:safeStorage, uid:uid, fmtBytes:fmtBytes, fmtDate:fmtDate, copyText:copyText});
+  }catch(e){
+    body.appendChild(el("div",{class:"card", role:"alert"},["Eroare la randare modul: " + e.message]));
+  }
+  associateLabels(body);
+  if(userInitiated){ var h1 = head.querySelector("h1"); h1.setAttribute("tabindex", "-1"); h1.focus(); }
+}
+function storageBanner(){
+  if(!storageFailed) return;
+  if(content.querySelector(".banner")) return;
+  var b = el("div", {class:"banner", role:"alert"}, ["Stocarea locală a browserului nu este disponibilă sau este plină (mod privat / cookie-uri blocate?). Modificările din acest modul NU se vor păstra după închiderea paginii. Folosește „export date” pentru o copie."]);
+  content.insertBefore(b, content.firstChild);
+}
+storageListeners.push(storageBanner);
+
+var TFF_KEYS = ["notebook","spreadsheet","mindmap","kanban","ledger","paste"];
+document.getElementById("export-btn").addEventListener("click", function(){
+  var data = { app:"trusa-fara-frontiere", version:1, exported:new Date().toISOString(), data:{} };
+  TFF_KEYS.forEach(function(k){ var v = safeStorage.get(k, null); if(v !== null) data.data[k] = v; });
+  var blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url; a.download = "trusa-fara-frontiere-" + new Date().toISOString().slice(0,10) + ".json";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+});
+var importFile = document.getElementById("import-file");
+document.getElementById("import-btn").addEventListener("click", function(){ importFile.click(); });
+importFile.addEventListener("change", function(){
+  var f = importFile.files && importFile.files[0];
+  importFile.value = "";
+  if(!f) return;
+  if(f.size > 10*1024*1024){ window.alert("Fișier prea mare."); return; }
+  var r = new FileReader();
+  r.onload = function(){
+    var parsed;
+    try{ parsed = JSON.parse(String(r.result)); }catch(e){ window.alert("Fișier JSON invalid."); return; }
+    if(!parsed || parsed.app !== "trusa-fara-frontiere" || !parsed.data || typeof parsed.data !== "object"){ window.alert("Fișierul nu este un export al Trusei fără frontiere."); return; }
+    var keys = TFF_KEYS.filter(function(k){ return Object.prototype.hasOwnProperty.call(parsed.data, k); });
+    var isArr = { notebook:1, kanban:1, ledger:1, paste:1 };
+    var bad = keys.filter(function(k){ var v = parsed.data[k]; return isArr[k] ? !Array.isArray(v) : !(v && typeof v === "object" && !Array.isArray(v)); });
+    if(bad.length){ window.alert("Date nevalide pentru: " + bad.join(", ")); return; }
+    if(!keys.length){ window.alert("Nu există date de importat."); return; }
+    if(!window.confirm("Importul înlocuiește datele existente pentru: " + keys.join(", ") + ". Continui?")) return;
+    var okAll = true;
+    keys.forEach(function(k){ if(!safeStorage.set(k, parsed.data[k])) okAll = false; });
+    selectModule(activeId);
+    window.alert(okAll ? "Import reușit." : "Import incomplet: stocarea locală nu este disponibilă.");
+  };
+  r.onerror = function(){ window.alert("Nu am putut citi fișierul."); };
+  r.readAsText(f);
+});
+
+var navToggle = document.getElementById("mobile-nav-toggle");
+function closeMobileNav(){ sidebar.classList.remove("open"); navToggle.setAttribute("aria-expanded", "false"); }
+navToggle.addEventListener("click", function(){
+  var open = sidebar.classList.toggle("open");
+  navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  if(open){ var first = sidebar.querySelector("button"); if(first) first.focus(); }
+});
+document.addEventListener("keydown", function(ev){
+  if(ev.key === "Escape" && sidebar.classList.contains("open")){ closeMobileNav(); navToggle.focus(); }
+});
+
+document.getElementById("theme-btn").addEventListener("click", function(){
+  var cur = document.documentElement.getAttribute("data-theme");
+  var next;
+  if(cur === "dark") next = "light";
+  else if(cur === "light") next = "dark";
+  else {
+    var prefersLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
+    next = prefersLight ? "dark" : "light";
+  }
+  document.documentElement.setAttribute("data-theme", next);
+});
+
+var aboutDlg = document.getElementById("about");
+document.getElementById("about-btn").addEventListener("click", function(){
+  if(typeof aboutDlg.showModal === "function") aboutDlg.showModal();
+  else aboutDlg.setAttribute("open","");
+});
+document.getElementById("about-close").addEventListener("click", function(){ aboutDlg.close(); });
+
+/* init */
+renderSidebar();
+if(MODULES.length) selectModule(MODULES[0].id);
+
+})();
+</script>
+</body>
+</html>
