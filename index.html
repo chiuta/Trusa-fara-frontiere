@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'self' 'sha256-fCw2Nk7VnrlB9tWByDNhR26HEd98yEUt1EtpFSQgw1U='; img-src 'self' data: blob:; worker-src blob:; connect-src 'none'; base-uri 'none'; form-action 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'self' 'sha256-8weYJQBNxKf9FBotnrBH+coLqI29xRcqkC6K2nfh1zw='; img-src 'self' data: blob:; worker-src blob:; connect-src 'none'; base-uri 'none'; form-action 'none';">
 <title>Trusa fără frontiere — 15 module offline, inspirate din catalogul YunoHost</title>
 <meta name="description" content="Trusă de 15 unelte într-un singur fișier HTML, fără cont și fără trimitere de date: regex, JSON, diff, hash, parole, calculator subnet, notițe, foaie de calcul, Kanban și altele.">
 <meta property="og:type" content="website">
@@ -164,6 +164,8 @@
   mark{background:var(--accent-dim); color:var(--text); border-radius:3px; padding:0 2px;}
   .diff-add{background:rgba(82,214,138,.15); color:var(--good);}
   .diff-del{background:rgba(226,96,122,.15); color:var(--bad); text-decoration:line-through;}
+  .diff-add .dw{background:rgba(82,214,138,.45); font-weight:700; border-radius:2px; color:var(--text);}
+  .diff-del .dw{background:rgba(226,96,122,.45); font-weight:700; border-radius:2px; color:var(--text);}
   .diff-line{font-family:var(--mono); font-size:12.5px; white-space:pre-wrap; padding:1px 6px; border-radius:3px;}
   .kanban-cols{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
   @media (max-width:760px){.kanban-cols{grid-template-columns:1fr;}}
@@ -338,6 +340,10 @@ MODULES.push({
     var flagsI = el("input",{type:"checkbox"});
     var flagsM = el("input",{type:"checkbox"});
     var flagsS = el("input",{type:"checkbox"});
+    var flagsU = el("input",{type:"checkbox"});
+    var replInput = el("input",{type:"text", placeholder:"ex: <$1>  ·  $<nume>  ·  $&  ·  $$", "aria-label":"Înlocuire"});
+    var replOut = el("textarea",{rows:"5", readonly:"readonly", "aria-label":"Text după înlocuire"});
+    var replWrap = el("div",{class:"field"},[el("label",{},["Înlocuire (opțional): $1, $<nume>, $&, $$, $`, $'"]), replInput]);
     var testArea = el("textarea",{rows:"6"});
     testArea.value = "Contact: alexio@trom.tf sau echipa@example.org\nA doua linie fara adresa.";
     var output = el("div",{class:"card mono", style:"white-space:pre-wrap; min-height:70px; font-size:13px;"});
@@ -359,8 +365,8 @@ MODULES.push({
       try{
         if(!workerUrl){
           var src = "self.onmessage=function(e){var d=e.data;try{var re=new RegExp(d.p,d.f),out=[],m,g=0;" +
-            "if(d.f.indexOf('g')!==-1){while((m=re.exec(d.t))!==null&&g<3000){out.push({i:m.index,a:Array.prototype.slice.call(m)});if(m[0]===''){re.lastIndex++;}g++;}}" +
-            "else{m=re.exec(d.t);if(m)out.push({i:m.index,a:Array.prototype.slice.call(m)});}" +
+            "if(d.f.indexOf('g')!==-1){while((m=re.exec(d.t))!==null&&g<3000){out.push({i:m.index,a:Array.prototype.slice.call(m),g:m.groups||null});if(m[0]===''){re.lastIndex++;}g++;}}" +
+            "else{m=re.exec(d.t);if(m)out.push({i:m.index,a:Array.prototype.slice.call(m),g:m.groups||null});}" +
             "self.postMessage({id:d.id,r:out});}catch(x){self.postMessage({id:d.id,err:String(x.message||x)});}};";
           workerUrl = URL.createObjectURL(new Blob([src], {type:"text/javascript"}));
         }
@@ -379,7 +385,32 @@ MODULES.push({
       worker.postMessage({id:myId, p:pattern, f:flags, t:text});
       return true;
     }
+    /* Înlocuirea se construiește din match-urile deja găsite (în Worker), nu rulând din nou expresia pe firul principal. */
+    function expandRepl(rep, m, text){
+      return rep.replace(/\$(\$|&|`|'|\d{1,2}|<([^>]*)>)/g, function(all, t, name){
+        if(t === "$") return "$";
+        if(t === "&") return m[0];
+        if(t === "`") return text.slice(0, m.index);
+        if(t === "'") return text.slice(m.index + m[0].length);
+        if(name !== undefined){ return m.groups ? (m.groups[name] === undefined ? "" : m.groups[name]) : all; }
+        var n2 = parseInt(t, 10), n1 = parseInt(t.charAt(0), 10);
+        if(t.length === 2 && n2 >= 1 && n2 < m.length) return m[n2] === undefined ? "" : m[n2];
+        if(n1 >= 1 && n1 < m.length) return (m[n1] === undefined ? "" : m[n1]) + t.slice(1);
+        return all;
+      });
+    }
+    function renderReplace(matches, text){
+      if(!replInput.value){ replOut.value = ""; return; }
+      var res = [], last = 0;
+      matches.forEach(function(mm){
+        res.push(text.slice(last, mm.index), expandRepl(replInput.value, mm, text));
+        last = mm.index + mm[0].length;
+      });
+      res.push(text.slice(last));
+      replOut.value = res.join("");
+    }
     function render(matches, text){
+      renderReplace(matches, text);
       var parts = [], last = 0;
       matches.forEach(function(mm){
         parts.push(escapeHtml(text.slice(last, mm.index)));
@@ -415,16 +446,18 @@ MODULES.push({
       if(flagsI.checked) flags += "i";
       if(flagsM.checked) flags += "m";
       if(flagsS.checked) flags += "s";
+      if(flagsU.checked) flags += "u";
       var re;
       try{ re = new RegExp(patternInput.value, flags); }
-      catch(e){ errorBox.textContent = "Regex invalid: " + e.message; output.textContent = testArea.value; return; }
+      catch(e){ errorBox.textContent = "Regex invalid: " + e.message; output.textContent = testArea.value; replOut.value = ""; return; }
       var text = testArea.value;
       // Rulăm într-un Worker cu timeout, ca un pattern cu backtracking catastrofal să nu blocheze pagina.
       var started = runInWorker(patternInput.value, flags, text, function(rows){
-        render(rows.map(function(r){ var a = r.a.slice(); a.index = r.i; return a; }), text);
+        render(rows.map(function(r){ var a = r.a.slice(); a.index = r.i; a.groups = r.g || undefined; return a; }), text);
       }, function(msg){
         errorBox.textContent = msg;
         output.textContent = text;
+        replOut.value = "";
         matchList.innerHTML = "";
       });
       if(started === false){
@@ -447,7 +480,8 @@ MODULES.push({
         el("label",{style:"display:flex;align-items:center;gap:6px;"},[flagsG, "g global"]),
         el("label",{style:"display:flex;align-items:center;gap:6px;"},[flagsI, "i insensitive"]),
         el("label",{style:"display:flex;align-items:center;gap:6px;"},[flagsM, "m multiline"]),
-        el("label",{style:"display:flex;align-items:center;gap:6px;"},[flagsS, "s dotAll"])
+        el("label",{style:"display:flex;align-items:center;gap:6px;"},[flagsS, "s dotAll"]),
+        el("label",{style:"display:flex;align-items:center;gap:6px;"},[flagsU, "u unicode"])
       ]),
       el("div",{},[
         quickBtn("email", "\\b[\\w.+-]+@[\\w-]+\\.[a-zA-Z]{2,}\\b"),
@@ -459,9 +493,12 @@ MODULES.push({
       el("div",{class:"field"},[el("label",{},["Text de test"]), testArea]),
       errorBox,
       el("div",{class:"field"},[el("label",{},["Rezultat (evidențiat)"]), output]),
-      el("div",{},[el("label",{},["Match-uri"]), matchList])
+      el("div",{},[el("label",{},["Match-uri"]), matchList]),
+      replWrap,
+      el("div",{class:"field"},[el("label",{},["Text după înlocuire"]), replOut,
+        el("div",{},[el("button",{class:"btn small", type:"button", onclick:function(){ ctx.copyText(replOut.value, this); }},["Copiază"])])])
     ]));
-    [patternInput, flagsG, flagsI, flagsM, flagsS, testArea].forEach(function(node){
+    [patternInput, flagsG, flagsI, flagsM, flagsS, flagsU, replInput, testArea].forEach(function(node){
       node.addEventListener("input", run);
       node.addEventListener("change", run);
     });
@@ -523,9 +560,46 @@ MODULES.push({
       output.value = JSON.stringify(sortKeysDeep(val), null, ind);
     }
 
+    function toCsv(){
+      var val = parseOrError();
+      if(val === undefined){ output.value = ""; return; }
+      if(!Array.isArray(val) || !val.length || !val.every(function(r){ return r && typeof r === "object" && !Array.isArray(r); })){
+        status.innerHTML = "<span class='no'>✗ Pentru CSV am nevoie de o listă de obiecte, de ex. [{\"a\":1},{\"a\":2}].</span>";
+        output.value = ""; return;
+      }
+      var cols = [];
+      val.forEach(function(r){ Object.keys(r).forEach(function(k){ if(cols.indexOf(k) === -1) cols.push(k); }); });
+      function cell(v){
+        if(v === undefined || v === null) return "";
+        var t = typeof v === "object" ? JSON.stringify(v) : String(v);
+        return /[",\r\n]/.test(t) || /^\s|\s$/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+      }
+      output.value = [cols.map(cell).join(",")].concat(val.map(function(r){
+        return cols.map(function(c){ return cell(Object.prototype.hasOwnProperty.call(r, c) ? r[c] : undefined); }).join(",");
+      })).join("\n");
+      status.innerHTML = "<span class='ok'>✓ CSV: " + val.length + " rânduri, " + cols.length + " coloane (valorile imbricate sunt scrise ca JSON)</span>";
+    }
+    var pathInput = el("input",{type:"text", placeholder:"ex: surse[0]   ·   a.b[2].c", "aria-label":"Cale în JSON"});
+    var pathOut = el("pre",{class:"mono", style:"white-space:pre-wrap; margin:6px 0 0; font-size:13px;", role:"status"});
+    function lookup(){
+      pathOut.textContent = "";
+      var path = pathInput.value.trim();
+      if(!path) return;
+      var val;
+      try{ val = JSON.parse(input.value); }catch(e){ pathOut.textContent = "JSON sursă invalid."; return; }
+      var parts = path.replace(/\[(\d+)\]/g, ".$1").split(".").filter(function(p){ return p !== ""; });
+      var cur = val;
+      for(var i=0;i<parts.length;i++){
+        if(cur !== null && typeof cur === "object" && Object.prototype.hasOwnProperty.call(cur, parts[i])) cur = cur[parts[i]];
+        else { pathOut.textContent = "Cale inexistentă la „" + parts[i] + "”."; return; }
+      }
+      pathOut.textContent = JSON.stringify(cur, null, 2);
+    }
+
     container.appendChild(el("div",{class:"stack"},[
       el("div",{class:"field"},[el("label",{},["JSON sursă"]), input]),
       status, note,
+      el("div",{class:"field"},[el("label",{},["Caută o cale (chei separate prin punct, indici în paranteze)"]), pathInput, pathOut]),
       el("div",{class:"row"},[
         el("div",{class:"field", style:"max-width:160px;"},[el("label",{},["Indentare"]), indentSel]),
       ]),
@@ -534,11 +608,16 @@ MODULES.push({
         " ",
         el("button",{class:"btn", type:"button", onclick:formatSorted},["Formatează + sortează chei"]),
         " ",
-        el("button",{class:"btn", type:"button", onclick:minify},["Minifică"])
+        el("button",{class:"btn", type:"button", onclick:minify},["Minifică"]),
+        " ",
+        el("button",{class:"btn", type:"button", onclick:toCsv},["Listă de obiecte → CSV"]),
+        " ",
+        el("button",{class:"btn small", type:"button", onclick:function(){ ctx.copyText(output.value, this); }},["Copiază rezultat"])
       ]),
       el("div",{class:"field"},[el("label",{},["Rezultat"]), output])
     ]));
-    input.addEventListener("input", parseOrError);
+    input.addEventListener("input", function(){ parseOrError(); lookup(); });
+    pathInput.addEventListener("input", lookup);
     parseOrError();
   }
 });
@@ -577,6 +656,25 @@ MODULES.push({
       return ops;
     }
 
+    function wordDiff(x, y){
+      var A = x.match(/\s+|\w+|[^\s\w]/g) || [], B = y.match(/\s+|\w+|[^\s\w]/g) || [];
+      if(A.length > 300 || B.length > 300 || (!A.length && !B.length)) return null;
+      var n = A.length, m = B.length, dp = [], i, j;
+      for(i=0;i<=n;i++) dp.push(new Array(m+1).fill(0));
+      for(i=n-1;i>=0;i--) for(j=m-1;j>=0;j--) dp[i][j] = A[i]===B[j] ? dp[i+1][j+1]+1 : Math.max(dp[i+1][j], dp[i][j+1]);
+      var ra = [], rb = [];
+      function push(arr, t, c){ if(arr.length && arr[arr.length-1].c === c) arr[arr.length-1].t += t; else arr.push({t:t, c:c}); }
+      i = 0; j = 0;
+      while(i<n && j<m){
+        if(A[i]===B[j]){ push(ra, A[i], false); push(rb, B[j], false); i++; j++; }
+        else if(dp[i+1][j] >= dp[i][j+1]){ push(ra, A[i], true); i++; }
+        else { push(rb, B[j], true); j++; }
+      }
+      while(i<n){ push(ra, A[i], true); i++; }
+      while(j<m){ push(rb, B[j], true); j++; }
+      return [ra, rb];
+    }
+
     function run(){
       var a = left.value.split(/\r\n|\r|\n/);
       var b = right.value.split(/\r\n|\r|\n/);
@@ -587,12 +685,29 @@ MODULES.push({
       }
       var ops = lcs(a, b);
       var added = 0, removed = 0;
-      ops.forEach(function(op){
+      /* în blocurile „șters + adăugat” de aceeași lungime, cuvintele schimbate din fiecare pereche de linii sunt evidențiate */
+      var wordMarks = {};
+      for(var oi=0; oi<ops.length;){
+        var ds = oi; while(oi<ops.length && ops[oi][0]==="del") oi++;
+        var de = oi; while(oi<ops.length && ops[oi][0]==="add") oi++;
+        if(de>ds && oi>de && (de-ds)===(oi-de)){
+          for(var pk=0; pk<de-ds; pk++){
+            var wd = wordDiff(ops[ds+pk][1], ops[de+pk][1]);
+            if(wd){ wordMarks[ds+pk] = wd[0]; wordMarks[de+pk] = wd[1]; }
+          }
+        }
+        if(oi===de && de===ds) oi++;
+      }
+      ops.forEach(function(op, idx){
         var cls = op[0]==="add" ? "diff-add" : op[0]==="del" ? "diff-del" : "";
         var prefix = op[0]==="add" ? "+ " : op[0]==="del" ? "- " : "  ";
         if(op[0]==="add") added++;
         if(op[0]==="del") removed++;
-        var div = el("div",{class:"diff-line" + (cls?" "+cls:"")}, [prefix + op[1]]);
+        var kids = [prefix];
+        if(wordMarks[idx]){
+          wordMarks[idx].forEach(function(seg){ kids.push(seg.c ? el("span",{class:"dw"},[seg.t]) : seg.t); });
+        } else kids.push(op[1]);
+        var div = el("div",{class:"diff-line" + (cls?" "+cls:"")}, kids);
         out.appendChild(div);
       });
       stats.textContent = "+" + added + " adăugate, −" + removed + " șterse, " + (ops.length-added-removed) + " neschimbate";
@@ -625,6 +740,20 @@ MODULES.push({
     var urlEnc = el("input",{type:"text", readonly:"readonly"});
     var hexOut = el("input",{type:"text", readonly:"readonly"});
     var shaBox = el("div",{class:"stack"});
+    var hmacKey = el("input",{type:"text", placeholder:"cheie secretă (opțional) — calculează HMAC", autocomplete:"off", spellcheck:"false"});
+    var hmacBox = el("div",{class:"stack"});
+    var expected = el("input",{type:"text", placeholder:"lipește un hash cunoscut (hex) pentru verificare", autocomplete:"off", spellcheck:"false"});
+    var verifyOut = el("div",{role:"status", style:"font-size:12.5px; margin-top:6px;"});
+    var computed = {}; // algoritm -> hex, pentru verificare
+
+    function verify(){
+      var want = expected.value.replace(/[\s:]/g, "").toLowerCase();
+      verifyOut.innerHTML = "";
+      if(!want) return;
+      var hit = Object.keys(computed).filter(function(k){ return computed[k] === want; });
+      if(hit.length) verifyOut.innerHTML = "<span class='ok'>✓ Se potrivește: " + hit.join(", ") + "</span>";
+      else verifyOut.innerHTML = "<span class='no'>✗ Nu se potrivește cu niciun hash/HMAC calculat mai sus (verifică textul exact, inclusiv linia nouă de la sfârșit).</span>";
+    }
 
     function toBase64(str){
       var bytes = new TextEncoder().encode(str);
@@ -644,6 +773,9 @@ MODULES.push({
     async function runHashes(text){
       var token = ++hashToken;
       shaBox.innerHTML = "";
+      hmacBox.innerHTML = "";
+      computed = {};
+      verify();
       if(!(window.crypto && window.crypto.subtle)){
         shaBox.appendChild(el("div",{class:"faint"},["SHA indisponibil: Web Crypto cere un context sigur (HTTPS, localhost sau fișier local)."]));
         return;
@@ -659,8 +791,28 @@ MODULES.push({
             el("span",{class:"mono faint", style:"word-break:break-all;"},[bufToHex(buf)])
           ]);
           shaBox.appendChild(row);
+          computed[algos[i]] = bufToHex(buf);
+          verify();
         }catch(e){
           if(token === hashToken) shaBox.appendChild(el("div",{class:"no"},[algos[i] + ": eroare — " + e.message]));
+        }
+      }
+      if(hmacKey.value){
+        var kb = new TextEncoder().encode(hmacKey.value);
+        for(i=0;i<algos.length;i++){
+          try{
+            var ck = await window.crypto.subtle.importKey("raw", kb, {name:"HMAC", hash:algos[i]}, false, ["sign"]);
+            var sig = await window.crypto.subtle.sign("HMAC", ck, enc);
+            if(token !== hashToken) return;
+            hmacBox.appendChild(el("div",{},[
+              el("span",{class:"pill"},["HMAC-" + algos[i]]), " ",
+              el("span",{class:"mono faint", style:"word-break:break-all;"},[bufToHex(sig)])
+            ]));
+            computed["HMAC-" + algos[i]] = bufToHex(sig);
+            verify();
+          }catch(e){
+            if(token === hashToken) hmacBox.appendChild(el("div",{class:"no"},["HMAC-" + algos[i] + ": eroare — " + e.message]));
+          }
         }
       }
     }
@@ -688,9 +840,13 @@ MODULES.push({
       el("div",{class:"field"},[el("label",{},["URL-encoded"]), urlEnc]),
       el("div",{class:"field"},[el("label",{},["Hex"]), hexOut]),
       el("div",{class:"field"},[el("label",{},["SHA (async, Web Crypto)"]), shaBox,
-        el("div",{class:"hint"},["SHA-1 este depășit criptografic. Aceste hash-uri rapide nu sunt potrivite pentru stocarea parolelor."])])
+        el("div",{class:"hint"},["SHA-1 este depășit criptografic. Aceste hash-uri rapide nu sunt potrivite pentru stocarea parolelor."])]),
+      el("div",{class:"field"},[el("label",{},["HMAC (cu cheie)"]), hmacKey, hmacBox]),
+      el("div",{class:"field"},[el("label",{},["Verifică un hash cunoscut"]), expected, verifyOut])
     ]));
     input.addEventListener("input", run);
+    hmacKey.addEventListener("input", run);
+    expected.addEventListener("input", verify);
     b64dec.addEventListener("input", decodeB64);
     run();
   }

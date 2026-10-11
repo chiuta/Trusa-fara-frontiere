@@ -15,10 +15,10 @@ Un set de module mici, scrise de la zero, inspirate de funcționalitatea de baz�
 ## Funcții
 
 Verificate în cod și testate în Chromium headless:
-- **Regex Lab**: potriviri evidențiate, grupuri, steaguri g/i/m/s; rulează într-un Worker cu limită de 1,5 s, ca un pattern cu backtracking catastrofal să nu blocheze pagina.
-- **JSON Lab**: validare, formatare (2/4 spații/tab), minificare, sortare recursivă a cheilor.
-- **Diff Viewer**: diferență pe linii (LCS), cu limită de dimensiune.
-- **Hash & Encoding Lab**: SHA-1/256/384/512 (Web Crypto), Base64 (UTF-8), URL-encode, hex.
+- **Regex Lab**: potriviri evidențiate, grupuri (inclusiv numite), steaguri g/i/m/s/u, previzualizare de înlocuire (`$1`, `$<nume>`, `$&`, `$$`, `` $` ``, `$'`); rulează într-un Worker cu limită de 1,5 s, ca un pattern cu backtracking catastrofal să nu blocheze pagina.
+- **JSON Lab**: validare, formatare (2/4 spații/tab), minificare, sortare recursivă a cheilor, căutare după cale (`a.b[0].c`) și conversie listă de obiecte → CSV.
+- **Diff Viewer**: diferență pe linii (LCS), cu evidențierea cuvintelor schimbate în perechile de linii modificate, cu limită de dimensiune.
+- **Hash & Encoding Lab**: SHA-1/256/384/512 și HMAC cu cheie (Web Crypto), verificarea unui hash cunoscut, Base64 (UTF-8), URL-encode, hex.
 - **Inspector de fișiere**: metadate, previzualizare imagine, statistici text, SHA-256, totul local.
 - **Generator parole**: parolă pe caractere și pasfrază din 150 de cuvinte, cu `crypto.getRandomValues` (fără rezervă pe `Math.random`) și estimare de entropie.
 - **Calculator subnet** IPv4/CIDR, **Convertor de unități** (lungime, masă, volum, date, temperatură).
@@ -55,6 +55,10 @@ Verificate în cod și testate în Chromium headless:
 Descarcă `index.html` și deschide-l în browser; nu are dependențe. Pentru server local: `python3 -m http.server`.
 
 ## Istoric / Changelog
+
+### 11.10.2026 (a treia actualizare) — 11 octombrie 2026
+- Regex Lab: previzualizare de înlocuire (construită din match-urile găsite în Worker, deci păstrează limita de 1,5 s), grupuri numite și steagul `u`.
+- JSON Lab: căutare după cale și listă de obiecte → CSV. Diff Viewer: cuvintele schimbate sunt evidențiate în interiorul liniilor modificate. Hash & Encoding Lab: HMAC cu cheie și verificarea unui hash cunoscut.
 
 ### 11.10.2026 (a doua actualizare) — 11 octombrie 2026
 - Securitate: `script-src` în CSP folosește hash SHA-256 în loc de `'unsafe-inline'`.
