@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self' data: blob:; worker-src blob:; connect-src 'none'; base-uri 'none'; form-action 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'self' 'sha256-fCw2Nk7VnrlB9tWByDNhR26HEd98yEUt1EtpFSQgw1U='; img-src 'self' data: blob:; worker-src blob:; connect-src 'none'; base-uri 'none'; form-action 'none';">
 <title>Trusa fără frontiere — 15 module offline, inspirate din catalogul YunoHost</title>
 <meta name="description" content="Trusă de 15 unelte într-un singur fișier HTML, fără cont și fără trimitere de date: regex, JSON, diff, hash, parole, calculator subnet, notițe, foaie de calcul, Kanban și altele.">
 <meta property="og:type" content="website">
@@ -46,6 +46,16 @@
   body{
     background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.5;
     -webkit-font-smoothing:antialiased;
+  }
+  .md-table{overflow-x:auto;margin:8px 0}
+  .md-table table{border-collapse:collapse;font-size:13px}
+  .md-table th,.md-table td{border:1px solid var(--border-strong);padding:4px 9px;text-align:left}
+  .md-table th{background:var(--bg-card-hover)}
+  @media print{
+    :root{--bg:#fff;--bg-elevated:#fff;--bg-card:#fff;--text:#000;--text-muted:#333;--text-faint:#444;--border:#bbb;--border-strong:#999}
+    header.top,#sidebar,.btn,.banner,button{display:none!important}
+    html,body{height:auto}.layout,#content{display:block;overflow:visible;height:auto}
+    textarea,input{border:1px solid #bbb;background:#fff;color:#000}
   }
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
@@ -209,6 +219,14 @@
 "use strict";
 
 /* ---------- shared utils ---------- */
+function downloadText(name, text, type){
+  var blob = new Blob([text], {type:type || "text/plain;charset=utf-8"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+}
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, function(c){
     return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
@@ -1002,7 +1020,7 @@ MODULES.push({
     function save(){ safeStorage.set("notebook", notes); }
     function mdToHtml(md){
       var lines = md.split("\n");
-      var out = [], inList = false, inCode = false, codeBuf = [];
+      var out = [], inCode = false, codeBuf = [];
       function inline(s){
         s = escapeHtml(s);
         s = s.replace(/`([^`]+)`/g, "<code>$1</code>");
@@ -1015,34 +1033,59 @@ MODULES.push({
         });
         return s;
       }
-      lines.forEach(function(line){
+      var listTag = "";
+      function closeList(){ if(listTag){ out.push("</" + listTag + ">"); listTag = ""; } }
+      function cells(row){ return row.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map(function(c){ return c.trim(); }); }
+      var isSep = function(l){ return /^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$/.test(l) && l.indexOf("-") >= 0 && (l.indexOf("|") >= 0); };
+      for(var li = 0; li < lines.length; li++){
+        var line = lines[li];
         if(/^```/.test(line)){
-          if(!inCode){ inCode = true; codeBuf = []; }
+          if(!inCode){ closeList(); inCode = true; codeBuf = []; }
           else { inCode = false; out.push("<pre class='mono card'>" + escapeHtml(codeBuf.join("\n")) + "</pre>"); }
-          return;
+          continue;
         }
-        if(inCode){ codeBuf.push(line); return; }
+        if(inCode){ codeBuf.push(line); continue; }
         var m;
-        if(/^\s*$/.test(line)){ if(inList){ out.push("</ul>"); inList=false; } return; }
-        if((m = /^(#{1,6})\s+(.*)$/.exec(line))){
-          if(inList){ out.push("</ul>"); inList=false; }
-          out.push("<h" + m[1].length + ">" + inline(m[2]) + "</h" + m[1].length + ">");
-          return;
+        if(/^\s*$/.test(line)){ closeList(); continue; }
+        if(line.indexOf("|") >= 0 && li + 1 < lines.length && isSep(lines[li+1])){
+          closeList();
+          var head = cells(line), t = ["<div class='md-table'><table><thead><tr>"];
+          head.forEach(function(h){ t.push("<th>" + inline(h) + "</th>"); });
+          t.push("</tr></thead><tbody>");
+          li += 2;
+          while(li < lines.length && lines[li].indexOf("|") >= 0 && !/^\s*$/.test(lines[li])){
+            t.push("<tr>"); cells(lines[li]).forEach(function(c){ t.push("<td>" + inline(c) + "</td>"); }); t.push("</tr>"); li++;
+          }
+          li--;
+          t.push("</tbody></table></div>");
+          out.push(t.join(""));
+          continue;
         }
+        if((m = /^(#{1,6})\s+(.*)$/.exec(line))){
+          closeList();
+          out.push("<h" + m[1].length + ">" + inline(m[2]) + "</h" + m[1].length + ">");
+          continue;
+        }
+        if(/^\s*([-*_])(\s*\1){2,}\s*$/.test(line)){ closeList(); out.push("<hr>"); continue; }
         if(/^>\s?/.test(line)){
-          if(inList){ out.push("</ul>"); inList=false; }
+          closeList();
           out.push("<blockquote>" + inline(line.replace(/^>\s?/,"")) + "</blockquote>");
-          return;
+          continue;
         }
         if((m = /^[-*]\s+(.*)$/.exec(line))){
-          if(!inList){ out.push("<ul>"); inList=true; }
+          if(listTag !== "ul"){ closeList(); out.push("<ul>"); listTag = "ul"; }
           out.push("<li>" + inline(m[1]) + "</li>");
-          return;
+          continue;
         }
-        if(inList){ out.push("</ul>"); inList=false; }
+        if((m = /^\d+[.)]\s+(.*)$/.exec(line))){
+          if(listTag !== "ol"){ closeList(); out.push("<ol>"); listTag = "ol"; }
+          out.push("<li>" + inline(m[1]) + "</li>");
+          continue;
+        }
+        closeList();
         out.push("<p>" + inline(line) + "</p>");
-      });
-      if(inList) out.push("</ul>");
+      }
+      closeList();
       if(inCode) out.push("<pre class='mono card'>" + escapeHtml(codeBuf.join("\n")) + "</pre>");
       return out.join("\n");
     }
@@ -1085,6 +1128,12 @@ MODULES.push({
       activeNoteId = n.id;
       save(); renderList(); loadNote();
     }
+    function exportNote(){
+      var n = notes.filter(function(x){ return x.id===activeNoteId; })[0];
+      if(!n) return;
+      var slug = String(n.title || "nota").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "nota";
+      downloadText(slug + ".md", n.body || "", "text/markdown;charset=utf-8");
+    }
     function deleteNote(){
       if(notes.length <= 1) return;
       if(!window.confirm("Ștergi nota selectată? Acțiunea nu poate fi anulată.")) return;
@@ -1102,7 +1151,8 @@ MODULES.push({
         el("div",{class:"row"},[
           el("div",{class:"field", style:"flex:3;"},[el("label",{},["Titlu"]), titleInput]),
           el("div",{style:"flex:1; display:flex; align-items:flex-end;"},[
-            el("button",{class:"btn danger small", type:"button", onclick:deleteNote},["Șterge nota"])
+            el("button",{class:"btn small", type:"button", onclick:exportNote, title:"Descarcă nota selectată ca fișier .md"},["Export .md"]),
+            el("button",{class:"btn danger small", type:"button", onclick:deleteNote, style:"margin-left:6px;"},["Șterge nota"])
           ])
         ]),
         el("div",{class:"grid-2"},[
@@ -1272,6 +1322,70 @@ MODULES.push({
       }
     }
 
+    var csvStatus = el("div",{class:"faint", role:"status", "aria-live":"polite"},[""]);
+    var csvFile = el("input",{type:"file", accept:".csv,.tsv,.txt,text/csv,text/plain", hidden:"hidden", "aria-label":"Alege fișierul CSV pentru import"});
+    function csvQuote(v){
+      var t = (v === undefined || v === null) ? "" : String(v);
+      if(typeof v !== "number" && /^[=+\-@\t\r]/.test(t) && !/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(t)) t = "'" + t; // protecție împotriva formulelor în alte programe
+      return /[",\n\r;]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+    }
+    function exportCsv(){
+      var maxR = -1, maxC = -1, grid = [];
+      for(var r=0;r<ROWS;r++){ grid[r] = []; for(var c=0;c<COLS;c++){
+        var ref = String.fromCharCode(65+c) + (r+1), v = getCellValue(ref);
+        grid[r][c] = v;
+        if(v !== "" && v !== undefined){ if(r>maxR) maxR = r; if(c>maxC) maxC = c; }
+      } }
+      if(maxR < 0){ csvStatus.textContent = "Foaia este goală: nu am ce exporta."; return; }
+      var lines = [];
+      for(var rr=0;rr<=maxR;rr++) lines.push(grid[rr].slice(0, maxC+1).map(csvQuote).join(","));
+      downloadText("foaie.csv", "\uFEFF" + lines.join("\r\n") + "\r\n", "text/csv;charset=utf-8");
+      csvStatus.textContent = "Exportat: " + (maxR+1) + " rânduri × " + (maxC+1) + " coloane (valorile calculate; separator virgulă).";
+    }
+    function parseCsv(text){
+      text = String(text).replace(/^\uFEFF/, "");
+      var first = text.split(/\r?\n/)[0] || "";
+      var delim = ","; var best = (first.match(/,/g)||[]).length;
+      [";","\t"].forEach(function(d){ var n = first.split(d).length - 1; if(n > best){ best = n; delim = d; } });
+      var rows = [], row = [], cur = "", q = false;
+      for(var i=0;i<text.length;i++){
+        var ch = text[i];
+        if(q){
+          if(ch === '"'){ if(text[i+1] === '"'){ cur += '"'; i++; } else q = false; }
+          else cur += ch;
+        } else if(ch === '"' && cur === ""){ q = true; }
+        else if(ch === delim){ row.push(cur); cur = ""; }
+        else if(ch === "\n" || ch === "\r"){ if(ch === "\r" && text[i+1] === "\n") i++; row.push(cur); cur = ""; rows.push(row); row = []; }
+        else cur += ch;
+      }
+      if(cur !== "" || row.length){ row.push(cur); rows.push(row); }
+      return rows;
+    }
+    csvFile.addEventListener("change", function(){
+      var f = csvFile.files && csvFile.files[0]; csvFile.value = "";
+      if(!f) return;
+      if(f.size > 2*1024*1024){ csvStatus.textContent = "Fișier prea mare pentru această foaie (max. 2 MB)."; return; }
+      var fr = new FileReader();
+      fr.onload = function(){
+        var rows = parseCsv(fr.result).filter(function(r){ return r.some(function(c){ return c !== ""; }); });
+        if(!rows.length){ csvStatus.textContent = "Fișierul CSV nu conține date."; return; }
+        var hasData = Object.keys(cellData).some(function(k){ return cellData[k] !== "" && cellData[k] !== undefined; });
+        if(hasData && !window.confirm("Importul înlocuiește conținutul foii curente. Continui?")) return;
+        var next = {}, cut = rows.length > ROWS, wide = rows.some(function(r){ return r.length > COLS; });
+        rows.slice(0, ROWS).forEach(function(r, ri){
+          r.slice(0, COLS).forEach(function(v, ci){
+            if(v === "") return;
+            if(/^'[+\-@]/.test(v)) v = v.slice(1); // „'=…” rămâne text cu apostrof: în această foaie orice conținut care începe cu = este formulă
+            next[String.fromCharCode(65+ci) + (ri+1)] = v.slice(0, 500);
+          });
+        });
+        cellData = next; safeStorage.set("spreadsheet", cellData); recalcAll();
+        csvStatus.textContent = "Importat din " + f.name + ": " + Math.min(rows.length, ROWS) + " rânduri." + ((cut || wide) ? " Atenție: ce depășește " + COLS + " coloane × " + ROWS + " rânduri a fost ignorat." : "");
+      };
+      fr.onerror = function(){ csvStatus.textContent = "Nu am putut citi fișierul."; };
+      fr.readAsText(f);
+    });
+
     var table = el("table",{class:"ss-grid"});
     var headRow = el("tr",{},[el("th",{},[""])]);
     for(var c=0;c<COLS;c++) headRow.appendChild(el("th",{},[String.fromCharCode(65+c)]));
@@ -1302,7 +1416,13 @@ MODULES.push({
     container.appendChild(el("div",{class:"stack"},[
       el("div",{class:"faint"},["Formule: =A1+B2, =SUM(A1:A5), =AVG(...), =MIN(...), =MAX(...), =COUNT(...). Coloane A–H, rânduri 1–20. AVG/MIN/MAX/COUNT ignoră celulele goale sau text. Scrie direct în celulă, apoi Tab/Enter."]),
       el("div",{style:"overflow-x:auto;"},[table]),
-      el("button",{class:"btn small", type:"button", onclick:function(){ if(!window.confirm("Golești toată foaia? Acțiunea nu poate fi anulată.")) return; cellData = {}; safeStorage.set("spreadsheet", cellData); recalcAll(); }},["Golește foaia"])
+      el("div",{class:"row", style:"gap:8px; flex-wrap:wrap;"},[
+        el("button",{class:"btn small", type:"button", onclick:function(){ if(!window.confirm("Golești toată foaia? Acțiunea nu poate fi anulată.")) return; cellData = {}; safeStorage.set("spreadsheet", cellData); recalcAll(); }},["Golește foaia"]),
+        el("button",{class:"btn small", type:"button", onclick:exportCsv, title:"Descarcă valorile calculate ca fișier .csv"},["Export CSV"]),
+        el("button",{class:"btn small", type:"button", onclick:function(){ csvFile.click(); }, title:"Încarcă un fișier .csv în foaie (max. 8 coloane × 20 rânduri)"},["Import CSV"]),
+        csvFile
+      ]),
+      csvStatus
     ]));
     recalcAll();
   }

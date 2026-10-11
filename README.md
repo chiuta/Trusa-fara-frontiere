@@ -22,7 +22,7 @@ Verificate în cod și testate în Chromium headless:
 - **Inspector de fișiere**: metadate, previzualizare imagine, statistici text, SHA-256, totul local.
 - **Generator parole**: parolă pe caractere și pasfrază din 150 de cuvinte, cu `crypto.getRandomValues` (fără rezervă pe `Math.random`) și estimare de entropie.
 - **Calculator subnet** IPv4/CIDR, **Convertor de unități** (lungime, masă, volum, date, temperatură).
-- **Notebook Markdown** (subset: titluri, liste, citate, cod, link-uri http/https/mailto), **Mini foaie de calcul** (8×20, SUM/AVG/MIN/MAX/COUNT), **Hartă mentală** (mouse, atingere, tastatură), **Panou Kanban**, **Jurnal financiar**, **Vault de fragmente**.
+- **Notebook Markdown** (subset: titluri, liste cu buline și numerotate, citate, linie orizontală, tabele cu `|`, cod, link-uri http/https/mailto; „Export .md” descarcă nota selectată), **Mini foaie de calcul** (8×20, SUM/AVG/MIN/MAX/COUNT; „Export CSV” cu valorile calculate și „Import CSV” cu separator virgulă, punct și virgulă sau tab), **Hartă mentală** (mouse, atingere, tastatură), **Panou Kanban**, **Jurnal financiar**, **Vault de fragmente**.
 - **Cititor RSS/Atom** pentru fișiere XML încărcate sau lipite (nu descarcă feed-uri).
 - Export/import JSON al tuturor datelor locale; temă zi/noapte.
 
@@ -36,7 +36,7 @@ Verificate în cod și testate în Chromium headless:
 
 ## Confidențialitate și rețea
 
-- Aplicația nu face cereri de rețea: CSP din pagină are `connect-src 'none'`, fără scripturi, fonturi sau imagini externe. Nu există telemetrie, cont sau cookie-uri.
+- Aplicația nu face cereri de rețea: CSP din pagină are `connect-src 'none'` și `script-src` pe hash SHA-256 (fără `'unsafe-inline'`), fără scripturi, fonturi sau imagini externe. Nu există telemetrie, cont sau cookie-uri.
 - Stocare: `localStorage`, chei cu prefix `tff:` (`notebook`, `spreadsheet`, `mindmap`, `kanban`, `ledger`, `paste`), **necriptat**. Dacă stocarea e blocată (mod privat), aplicația merge, dar afișează un avertisment că datele nu se păstrează.
 - Gazde externe: niciuna, în afara linkului către github.com/YunoHost/apps din dialogul „despre” (se deschide doar dacă îl apeși, cu `noopener noreferrer`) și a link-urilor din notițe/feed-uri pe care le apeși tu.
 - Permisiuni de browser: niciuna. Fișierele alese rămân în browser. Se folosesc Worker din Blob (Regex Lab) și clipboard (butoanele „Copiază”).
@@ -55,6 +55,11 @@ Verificate în cod și testate în Chromium headless:
 Descarcă `index.html` și deschide-l în browser; nu are dependențe. Pentru server local: `python3 -m http.server`.
 
 ## Istoric / Changelog
+
+### 11.10.2026 (a doua actualizare) — 11 octombrie 2026
+- Securitate: `script-src` în CSP folosește hash SHA-256 în loc de `'unsafe-inline'`.
+- Notebook: tabele Markdown, liste numerotate, linie orizontală și „Export .md”. Foaie de calcul: „Export CSV” (cu protecție împotriva formulelor în alte programe: valorile text care încep cu `=`, `+`, `-`, `@` primesc un apostrof) și „Import CSV” (max. 8 coloane × 20 rânduri, cu confirmare).
+- Stil de tipărire: se tipărește doar modulul curent, pe fundal alb.
 
 ### 11.10.2026 — 11 octombrie 2026
 - Verificare de rutină la 11.10.2026: axe fără încălcări la 1280 și 360 px, fără erori de consolă; fără modificări de cod.
