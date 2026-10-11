@@ -4,6 +4,8 @@ Trusă de 15 unelte mici într-un singur fișier HTML: regex, JSON, diff, hash, 
 
 **Live:** https://chiuta.github.io/Trusa-fara-frontiere/
 
+Ultima actualizare: 11 octombrie 2026
+
 ![Captura de ecran](screenshot.png)
 
 ## Ce este
@@ -51,6 +53,11 @@ Verificate în cod și testate în Chromium headless:
 ## Rulare locală / offline
 
 Descarcă `index.html` și deschide-l în browser; nu are dependențe. Pentru server local: `python3 -m http.server`.
+
+## Istoric / Changelog
+
+### 11.10.2026 — 11 octombrie 2026
+- Verificare de rutină la 11.10.2026: axe fără încălcări la 1280 și 360 px, fără erori de consolă; fără modificări de cod.
 
 ## Licență
 
