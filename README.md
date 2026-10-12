@@ -1,10 +1,10 @@
 # Trusa fără frontiere
 
+**Versiune:** 1.0.0 · **Ultima actualizare:** 12 octombrie 2026
+
 Trusă de 15 unelte mici într-un singur fișier HTML: regex, JSON, diff, hash, parole, subnet, notițe, foaie de calcul, Kanban și altele. Rulează local în browser, fără cont.
 
 **Live:** https://chiuta.github.io/Trusa-fara-frontiere/
-
-Ultima actualizare: 11 octombrie 2026
 
 ![Captura de ecran](screenshot.png)
 
@@ -55,6 +55,9 @@ Verificate în cod și testate în Chromium headless:
 Descarcă `index.html` și deschide-l în browser; nu are dependențe. Pentru server local: `python3 -m http.server`.
 
 ## Istoric / Changelog
+
+### 1.0.0 — 12 octombrie 2026
+- Versiunea și data ultimei actualizări sunt afișate în aplicație (fereastra „despre & surse”).
 
 ### 11.10.2026 (a treia actualizare) — 11 octombrie 2026
 - Regex Lab: previzualizare de înlocuire (construită din match-urile găsite în Worker, deci păstrează limita de 1,5 s), grupuri numite și steagul `u`.
