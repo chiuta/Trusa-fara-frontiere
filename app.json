@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "slug": "trusa-fara-frontiere",
+  "name": "Trusa fără frontiere — 15 module offline, inspirate din catalogul YunoHost",
+  "version": "1.1.0",
+  "updated": "2026-10-14",
+  "description": "Trusă de 15 unelte într-un singur fișier HTML, fără cont și fără trimitere de date: regex, JSON, diff, hash, parole, calculator subnet, notițe, foaie de calcul, Kanban și altele.",
+  "egress": [],
+  "permissions": [
+    "clipboard",
+    "serviceWorker",
+    "localStorage",
+    "Web Crypto",
+    "Worker"
+  ],
+  "storageKeys": [
+    "tff:"
+  ],
+  "sizeBytes": 198454,
+  "sha256": "eb031243b9c9c0177bb72e6c9ae99bbc57ca251dc9aaa8c7eb2165d390ad74e9",
+  "csp": {
+    "present": true,
+    "directives": {
+      "default-src": "'none'",
+      "style-src": "'unsafe-inline'",
+      "script-src": "'self' sha256×3",
+      "img-src": "'self' data: blob:",
+      "worker-src": "'self' blob:",
+      "connect-src": "'none'",
+      "base-uri": "'none'",
+      "form-action": "'none'",
+      "manifest-src": "'self'"
+    },
+    "scriptInline": "hash",
+    "connect": "'none'"
+  },
+  "features": {
+    "export": true,
+    "import": true,
+    "i18n": [],
+    "pwa": {
+      "manifest": true,
+      "serviceWorker": true
+    },
+    "modules": [
+      "core",
+      "label",
+      "bundle"
+    ]
+  },
+  "kit": {
+    "version": "1.0.0",
+    "modules": [
+      "core",
+      "label",
+      "bundle"
+    ]
+  },
+  "selfSerializing": false
+}
