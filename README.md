@@ -1,87 +1,89 @@
 # Trusa fără frontiere
 
-**Versiune:** 1.1.0 · **Ultima actualizare:** 14 octombrie 2026
+**English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-Trusă de 15 unelte mici într-un singur fișier HTML: regex, JSON, diff, hash, parole, subnet, notițe, foaie de calcul, Kanban și altele. Rulează local în browser, fără cont.
+**Version:** 1.1.0 · **Last updated:** 2026-10-14
+
+A toolkit of 15 small tools in a single HTML file: regex, JSON, diff, hash, passwords, subnet, notes, spreadsheet, Kanban and more. It runs locally in the browser, with no account.
 
 **Live:** https://chiuta.github.io/Trusa-fara-frontiere/
 
-![Captura de ecran](screenshot.png)
+![Screenshot](screenshot.png)
 
-## Ce este
+## What it is
 
-Un set de module mici, scrise de la zero, inspirate de funcționalitatea de bază a unor categorii de aplicații din catalogul YunoHost (dev, birou, utilitare, instrumente de sistem, productivitate, lectură). Nu este o reconstrucție a acelor aplicații și nu este afiliat YunoHost; aplicațiile care depind de server (chat, sincronizare, social) nu au echivalent într-un fișier local.
+A set of small modules, written from scratch, inspired by the core functionality of some categories of applications in the YunoHost catalogue (dev, office, utilities, system tools, productivity, reading). It is not a reconstruction of those applications and is not affiliated with YunoHost; applications that depend on a server (chat, sync, social) have no equivalent in a local file.
 
-## Funcții
+## Features
 
-Verificate în cod și testate în Chromium headless:
-- **Regex Lab**: potriviri evidențiate, grupuri (inclusiv numite), steaguri g/i/m/s/u, previzualizare de înlocuire (`$1`, `$<nume>`, `$&`, `$$`, `` $` ``, `$'`); rulează într-un Worker cu limită de 1,5 s, ca un pattern cu backtracking catastrofal să nu blocheze pagina.
-- **JSON Lab**: validare, formatare (2/4 spații/tab), minificare, sortare recursivă a cheilor, căutare după cale (`a.b[0].c`) și conversie listă de obiecte → CSV.
-- **Diff Viewer**: diferență pe linii (LCS), cu evidențierea cuvintelor schimbate în perechile de linii modificate, cu limită de dimensiune.
-- **Hash & Encoding Lab**: SHA-1/256/384/512 și HMAC cu cheie (Web Crypto), verificarea unui hash cunoscut, Base64 (UTF-8), URL-encode, hex.
-- **Inspector de fișiere**: metadate, previzualizare imagine, statistici text, SHA-256, totul local.
-- **Generator parole**: parolă pe caractere și pasfrază din 150 de cuvinte, cu `crypto.getRandomValues` (fără rezervă pe `Math.random`) și estimare de entropie.
-- **Calculator subnet** IPv4/CIDR, **Convertor de unități** (lungime, masă, volum, date, temperatură).
-- **Notebook Markdown** (subset: titluri, liste cu buline și numerotate, citate, linie orizontală, tabele cu `|`, cod, link-uri http/https/mailto; „Export .md” descarcă nota selectată), **Mini foaie de calcul** (8×20, SUM/AVG/MIN/MAX/COUNT; „Export CSV” cu valorile calculate și „Import CSV” cu separator virgulă, punct și virgulă sau tab), **Hartă mentală** (mouse, atingere, tastatură), **Panou Kanban**, **Jurnal financiar**, **Vault de fragmente**.
-- **Cititor RSS/Atom** pentru fișiere XML încărcate sau lipite (nu descarcă feed-uri).
-- Export/import JSON al tuturor datelor locale; temă zi/noapte.
+Verified in code and tested in headless Chromium:
+- **Regex Lab**: highlighted matches, groups (including named ones), flags g/i/m/s/u, replacement preview (`$1`, `$<name>`, `$&`, `$$`, `` $` ``, `$'`); it runs in a Worker with a 1.5 s limit, so that a pattern with catastrophic backtracking cannot freeze the page.
+- **JSON Lab**: validation, formatting (2/4 spaces/tab), minification, recursive key sorting, search by path (`a.b[0].c`) and conversion of a list of objects → CSV.
+- **Diff Viewer**: line diff (LCS), with the changed words highlighted in pairs of modified lines, with a size limit.
+- **Hash & Encoding Lab**: SHA-1/256/384/512 and keyed HMAC (Web Crypto), verification of a known hash, Base64 (UTF-8), URL-encode, hex.
+- **File inspector**: metadata, image preview, text statistics, SHA-256, all local.
+- **Password generator**: character-based password and a passphrase from 150 words, with `crypto.getRandomValues` (no fallback to `Math.random`) and an entropy estimate.
+- **IPv4/CIDR subnet calculator**, **Unit converter** (length, mass, volume, data, temperature).
+- **Markdown notebook** (subset: headings, bulleted and numbered lists, quotes, horizontal rule, tables with `|`, code, http/https/mailto links; "Export .md" downloads the selected note), **Mini spreadsheet** (8×20, SUM/AVG/MIN/MAX/COUNT; "Export CSV" with the computed values and "Import CSV" with comma, semicolon or tab separator), **Mind map** (mouse, touch, keyboard), **Kanban board**, **Financial ledger**, **Snippet vault**.
+- **RSS/Atom reader** for uploaded or pasted XML files (it does not download feeds).
+- JSON export/import of all local data; day/night theme.
 
-## Manual de utilizare
+## User guide
 
-1. Alege un modul din meniul din stânga (pe telefon, butonul ☰).
-2. Introdu datele în câmpurile modulului; rezultatele se actualizează imediat (la Diff și Parole apeși butonul).
-3. Notițele, foaia, harta, Kanban-ul, jurnalul și fragmentele se salvează automat în browser.
-4. Pentru copie de rezervă apasă „export date” (descarcă un fișier JSON); „import date” îl reîncarcă și înlocuiește datele modulelor găsite în fișier, după confirmare.
-5. „despre & surse” explică proiectul și limitele lui.
+1. Choose a module from the menu on the left (on a phone, the ☰ button).
+2. Enter data in the module's fields; results update immediately (in Diff and Passwords you press the button).
+3. Notes, spreadsheet, mind map, Kanban, ledger and snippets are saved automatically in the browser.
+4. For a backup, press "export data" (downloads a JSON file); "import data" reloads it and replaces the data of the modules found in the file, after confirmation.
+5. "about & sources" explains the project and its limits.
 
-## Confidențialitate și rețea
+## Privacy and network
 
-- Aplicația nu face cereri de rețea: CSP din pagină are `connect-src 'none'` și `script-src` pe hash SHA-256 (fără `'unsafe-inline'`), fără scripturi, fonturi sau imagini externe. Nu există telemetrie, cont sau cookie-uri.
-- Stocare: `localStorage`, chei cu prefix `tff:` (`notebook`, `spreadsheet`, `mindmap`, `kanban`, `ledger`, `paste`), **necriptat**. Dacă stocarea e blocată (mod privat), aplicația merge, dar afișează un avertisment că datele nu se păstrează.
-- Gazde externe: niciuna, în afara linkului către github.com/YunoHost/apps din dialogul „despre” (se deschide doar dacă îl apeși, cu `noopener noreferrer`) și a link-urilor din notițe/feed-uri pe care le apeși tu.
-- Permisiuni de browser: niciuna. Fișierele alese rămân în browser. Se folosesc Worker din Blob (Regex Lab) și clipboard (butoanele „Copiază”).
+- The app makes no network requests: the page's CSP has `connect-src 'none'` and `script-src` by SHA-256 hash (no `'unsafe-inline'`), with no external scripts, fonts or images. There is no telemetry, account or cookies.
+- Storage: `localStorage`, keys with the prefix `tff:` (`notebook`, `spreadsheet`, `mindmap`, `kanban`, `ledger`, `paste`), **unencrypted**. If storage is blocked (private mode), the app works but shows a warning that data is not kept.
+- External hosts: none, apart from the link to github.com/YunoHost/apps in the "about" dialog (it opens only if you press it, with `noopener noreferrer`) and the links in notes/feeds that you press yourself.
+- Browser permissions: none. The files you choose stay in the browser. A Worker from a Blob (Regex Lab) and the clipboard ("Copy" buttons) are used.
 
-## Limite și avertismente
+## Limits and warnings
 
-- Datele din `localStorage` se pierd dacă ștergi datele site-ului sau schimbi browserul/dispozitivul; fă export periodic. Două file deschise simultan se pot suprascrie reciproc.
-- Nu păstra parole, chei sau date sensibile în Notebook, foaie sau Vault: sunt stocate în clar în browser.
-- Parolele sunt generate local, dar nu garantează prezența fiecărui tip de caractere. Pasfraza folosește o listă mică (150 de cuvinte, ≈7,2 biți/cuvânt): folosește 10–12 cuvinte pentru ceva important. Hash-urile SHA rapide nu sunt potrivite pentru stocarea parolelor; SHA-1 este depășit.
-- Foaia de calcul și Markdown sunt subseturi simple, nu înlocuiesc programe complete. Jurnalul financiar este evidență personală simplă, nu software contabil, și nu specifică moneda.
-- Numerele întregi peste 2^53 își pierd precizia în JSON Lab (limită JavaScript). Diff-ul refuză texte foarte mari.
-- Hărțile și modulele au fost testate în Chromium; alte browsere nu au fost testate.
+- Data in `localStorage` is lost if you clear the site data or change browser/device; export periodically. Two tabs open at the same time can overwrite each other.
+- Do not keep passwords, keys or sensitive data in the Notebook, spreadsheet or Vault: they are stored in plain text in the browser.
+- Passwords are generated locally, but they do not guarantee the presence of every character type. The passphrase uses a small list (150 words, ≈7.2 bits/word): use 10–12 words for anything important. Fast SHA hashes are not suitable for storing passwords; SHA-1 is deprecated.
+- The spreadsheet and Markdown are simple subsets and do not replace full programs. The financial ledger is simple personal record-keeping, not accounting software, and does not specify the currency.
+- Integers above 2^53 lose precision in JSON Lab (a JavaScript limit). Diff refuses very large texts.
+- The maps and modules were tested in Chromium; other browsers were not tested.
 
-## Rulare locală / offline
+## Running locally / offline
 
-Descarcă `index.html` și deschide-l în browser; nu are dependențe. Pentru server local: `python3 -m http.server`.
+Download `index.html` and open it in a browser; it has no dependencies. For a local server: `python3 -m http.server`.
 
-## Istoric / Changelog
+## History / Changelog
 
 ### 1.1.0 — 2026-10-14
-- Copie de rezervă și etichetare date (fff-kit).
+- Backup and data labelling (fff-kit).
 
-### 1.0.0 — 12 octombrie 2026
-- Versiunea și data ultimei actualizări sunt afișate în aplicație (fereastra „despre & surse”).
+### 1.0.0 — 12 October 2026
+- The version and the date of the last update are displayed in the app (the "about & sources" window).
 
-### 11.10.2026 (a treia actualizare) — 11 octombrie 2026
-- Regex Lab: previzualizare de înlocuire (construită din match-urile găsite în Worker, deci păstrează limita de 1,5 s), grupuri numite și steagul `u`.
-- JSON Lab: căutare după cale și listă de obiecte → CSV. Diff Viewer: cuvintele schimbate sunt evidențiate în interiorul liniilor modificate. Hash & Encoding Lab: HMAC cu cheie și verificarea unui hash cunoscut.
+### 11.10.2026 (third update) — 11 October 2026
+- Regex Lab: replacement preview (built from the matches found in the Worker, so it keeps the 1.5 s limit), named groups and the `u` flag.
+- JSON Lab: search by path and list of objects → CSV. Diff Viewer: changed words are highlighted inside modified lines. Hash & Encoding Lab: keyed HMAC and verification of a known hash.
 
-### 11.10.2026 (a doua actualizare) — 11 octombrie 2026
-- Securitate: `script-src` în CSP folosește hash SHA-256 în loc de `'unsafe-inline'`.
-- Notebook: tabele Markdown, liste numerotate, linie orizontală și „Export .md”. Foaie de calcul: „Export CSV” (cu protecție împotriva formulelor în alte programe: valorile text care încep cu `=`, `+`, `-`, `@` primesc un apostrof) și „Import CSV” (max. 8 coloane × 20 rânduri, cu confirmare).
-- Stil de tipărire: se tipărește doar modulul curent, pe fundal alb.
+### 11.10.2026 (second update) — 11 October 2026
+- Security: `script-src` in the CSP uses a SHA-256 hash instead of `'unsafe-inline'`.
+- Notebook: Markdown tables, numbered lists, horizontal rule and "Export .md". Spreadsheet: "Export CSV" (with protection against formulas in other programs: text values starting with `=`, `+`, `-`, `@` get an apostrophe) and "Import CSV" (max. 8 columns × 20 rows, with confirmation).
+- Print style: only the current module is printed, on a white background.
 
-### 11.10.2026 — 11 octombrie 2026
-- Verificare de rutină la 11.10.2026: axe fără încălcări la 1280 și 360 px, fără erori de consolă; fără modificări de cod.
+### 11.10.2026 — 11 October 2026
+- Routine check on 11.10.2026: axe with no violations at 1280 and 360 px, no console errors; no code changes.
 
-## Licență
+## License
 
-MIT — vezi fișierul LICENSE.
+MIT — see the LICENSE file.
 
-## Autor
+## Author
 
-Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf. Construit cu Claude (Anthropic) la cererea autorului.
+Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf. Built with Claude (Anthropic) at the author's request.
 
-## English summary
+## Summary
 
 Trusa fără frontiere ("Toolkit without borders") is a single-file, Romanian-language toolkit of 15 small offline tools: regex tester (Worker with timeout), JSON, diff, hash/encoding, file inspector, CSPRNG password and passphrase generator, subnet calculator, unit converter, Markdown notebook, mini spreadsheet, mind map, Kanban, ledger, snippet vault and an RSS/Atom file reader. No network requests (CSP `connect-src 'none'`), no telemetry; data stays unencrypted in `localStorage` with JSON export/import. Licence: MIT (see the LICENSE file).
