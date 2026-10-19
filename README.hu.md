@@ -2,7 +2,9 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.1.0 · **Utolsó frissítés:** 2026-10-14
+**Verzió:** 1.2.0 · **Utolsó frissítés:** 2026-10-19
+
+A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
 15 apró eszközből álló készlet egyetlen HTML-fájlban: regex, JSON, diff, hash, jelszavak, alhálózat, jegyzetek, táblázatkezelő, Kanban és mások. Helyben fut a böngészőben, fiók nélkül.
 
