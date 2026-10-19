@@ -86,6 +86,6 @@ MIT — vezi fișierul LICENSE.
 
 Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf. Construit cu Claude (Anthropic) la cererea autorului.
 
-## English summary
+## Rezumat
 
-Trusa fără frontiere ("Toolkit without borders") is a single-file, Romanian-language toolkit of 15 small offline tools: regex tester (Worker with timeout), JSON, diff, hash/encoding, file inspector, CSPRNG password and passphrase generator, subnet calculator, unit converter, Markdown notebook, mini spreadsheet, mind map, Kanban, ledger, snippet vault and an RSS/Atom file reader. No network requests (CSP `connect-src 'none'`), no telemetry; data stays unencrypted in `localStorage` with JSON export/import. Licence: MIT (see the LICENSE file).
+Trusa fără frontiere este un set de instrumente într-un singur fișier, în limba română, cu 15 mici instrumente offline: tester regex (Worker cu timeout), JSON, diff, hash/codificare, inspector de fișiere, generator CSPRNG de parole și fraze-parolă, calculator de subrețele, convertor de unități, caiet Markdown, mini foaie de calcul, hartă mentală, Kanban, registru, seif de fragmente și cititor de fișiere RSS/Atom. Fără cereri de rețea (CSP `connect-src 'none'`), fără telemetrie; datele rămân necriptate în `localStorage`, cu export/import JSON. Licență: MIT (vezi fișierul LICENSE).
