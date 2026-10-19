@@ -10,7 +10,7 @@ Un kit di 15 piccoli strumenti in un unico file HTML: regex, JSON, diff, hash, p
 
 **Applicazione online:** https://chiuta.github.io/Trusa-fara-frontiere/
 
-![Schermata](screenshot.png)
+![Schermata](screenshot.it.png)
 
 ## Che cos'è
 

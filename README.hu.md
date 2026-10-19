@@ -10,7 +10,7 @@ A felület nyelvei: **Română, English, Français, Italiano, Español, Portugu�
 
 **Online alkalmazás:** https://chiuta.github.io/Trusa-fara-frontiere/
 
-![Képernyőkép](screenshot.png)
+![Képernyőkép](screenshot.hu.png)
 
 ## Mi ez
 

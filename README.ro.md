@@ -10,7 +10,7 @@ Trusă de 15 unelte mici într-un singur fișier HTML: regex, JSON, diff, hash, 
 
 **Live:** https://chiuta.github.io/Trusa-fara-frontiere/
 
-![Captura de ecran](screenshot.png)
+![Captura de ecran](screenshot.ro.png)
 
 ## Ce este
 

@@ -10,7 +10,7 @@ Ein Werkzeugkasten aus 15 kleinen Tools in einer einzigen HTML-Datei: Regex, JSO
 
 **Online-App:** https://chiuta.github.io/Trusa-fara-frontiere/
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshot.de.png)
 
 ## Was es ist
 

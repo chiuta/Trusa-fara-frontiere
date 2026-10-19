@@ -10,7 +10,7 @@ A toolkit of 15 small tools in a single HTML file: regex, JSON, diff, hash, pass
 
 **Live:** https://chiuta.github.io/Trusa-fara-frontiere/
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshot.en.png)
 
 ## What it is
 

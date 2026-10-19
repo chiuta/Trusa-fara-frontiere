@@ -10,7 +10,7 @@ Une trousse de 15 petits outils dans un seul fichier HTML : regex, JSON, diff, h
 
 **Application en ligne :** https://chiuta.github.io/Trusa-fara-frontiere/
 
-![Capture d'écran](screenshot.png)
+![Capture d'écran](screenshot.fr.png)
 
 ## Ce que c'est
 
