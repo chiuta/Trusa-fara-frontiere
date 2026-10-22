@@ -2,8 +2,8 @@
   "schema": 1,
   "slug": "trusa-fara-frontiere",
   "name": "Trusa fără frontiere — 15 module offline, inspirate din catalogul YunoHost",
-  "version": "1.2.4",
-  "updated": "2026-10-22",
+  "version": "1.2.5",
+  "updated": "2026-10-23",
   "description": "Trusă de 15 unelte într-un singur fișier HTML, fără cont și fără trimitere de date: regex, JSON, diff, hash, parole, calculator subnet, notițe, foaie de calcul, Kanban și altele.",
   "egress": [],
   "permissions": [
@@ -17,8 +17,8 @@
     "tff:",
     "tff:lang"
   ],
-  "sizeBytes": 329189,
-  "sha256": "c2aae6e0241cdfc6e13dc9b87c06ff8e8080d2e0f82627c6f09ae03bff6f1122",
+  "sizeBytes": 358726,
+  "sha256": "9ea5779a0ac4522dd4a3f14f670f9163f83d8a7e809d4f8fac2f418758d4b5f5",
   "csp": {
     "present": true,
     "directives": {
@@ -54,14 +54,18 @@
     },
     "modules": [
       "core",
+      "store",
+      "dialog",
       "label",
       "bundle"
     ]
   },
   "kit": {
-    "version": "1.1.4",
+    "version": "1.2.0",
     "modules": [
       "core",
+      "store",
+      "dialog",
       "label",
       "bundle"
     ]
