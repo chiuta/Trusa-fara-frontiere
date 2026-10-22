@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · **Português** · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versão:** 1.2.5 · **Última atualização:** 2026-10-23
+**Versão:** 1.2.6 · **Última atualização:** 2026-10-23
 
 Idiomas da interface: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -41,7 +41,7 @@ Verificadas no código e testadas em Chromium sem interface:
 ## Privacidade e rede
 
 - A aplicação não faz pedidos de rede: a CSP da página tem `connect-src 'none'` e `script-src` por hash SHA-256 (sem `'unsafe-inline'`), sem scripts, tipos de letra ou imagens externos. Não há telemetria, conta nem cookies.
-- Armazenamento: `localStorage`, chaves com o prefixo `tff:` (`notebook`, `spreadsheet`, `mindmap`, `kanban`, `ledger`, `paste`), **sem cifra**. Se o armazenamento estiver bloqueado (modo privado), a aplicação funciona, mas mostra um aviso de que os dados não são guardados.
+- Armazenamento: `localStorage`, chaves com o prefixo `trusa-fara-frontiere.` (`notebook`, `spreadsheet`, `mindmap`, `kanban`, `ledger`, `paste`), **sem cifra**. Se o armazenamento estiver bloqueado (modo privado), a aplicação funciona, mas mostra um aviso de que os dados não são guardados.
 - Anfitriões externos: nenhum, além da ligação para github.com/YunoHost/apps na caixa «acerca de» (só se abre se a premir, com `noopener noreferrer`) e das ligações nas notas/feeds em que clicar.
 - Permissões do navegador: nenhuma. Os ficheiros escolhidos ficam no navegador. Usam-se um Worker a partir de um Blob (Regex Lab) e a área de transferência (botões «Copiar»).
 
@@ -59,6 +59,10 @@ Verificadas no código e testadas em Chromium sem interface:
 Descarregue `index.html` e abra-o num navegador; não tem dependências. Para um servidor local: `python3 -m http.server`.
 
 ## Histórico / Changelog
+
+### 1.2.6 — 2026-10-23
+
+- As chaves do armazenamento local passam a usar o prefixo `trusa-fara-frontiere.` (`FFF.store.migrate` no arranque, antes de qualquer leitura): os dados existentes são mantidos automaticamente e as cópias `.fff.json` antigas continuam a poder ser importadas.
 
 ### 1.2.4 — 2026-10-22
 - fff-kit 1.1.4: alvos táteis e texto mínimo

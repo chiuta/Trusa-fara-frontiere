@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.2.5 · **Utolsó frissítés:** 2026-10-23
+**Verzió:** 1.2.6 · **Utolsó frissítés:** 2026-10-23
 
 A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -41,7 +41,7 @@ A kódban ellenőrizve és fej nélküli Chromiumban tesztelve:
 ## Adatvédelem és hálózat
 
 - Az alkalmazás nem küld hálózati kéréseket: az oldal CSP-jében `connect-src 'none'` és SHA-256 hash alapú `script-src` van (`'unsafe-inline'` nélkül), külső szkriptek, betűtípusok vagy képek nélkül. Nincs telemetria, fiók vagy süti.
-- Tárolás: `localStorage`, `tff:` előtagú kulcsok (`notebook`, `spreadsheet`, `mindmap`, `kanban`, `ledger`, `paste`), **titkosítatlanul**. Ha a tárolás le van tiltva (privát mód), az alkalmazás működik, de figyelmeztet, hogy az adatok nem maradnak meg.
+- Tárolás: `localStorage`, `trusa-fara-frontiere.` előtagú kulcsok (`notebook`, `spreadsheet`, `mindmap`, `kanban`, `ledger`, `paste`), **titkosítatlanul**. Ha a tárolás le van tiltva (privát mód), az alkalmazás működik, de figyelmeztet, hogy az adatok nem maradnak meg.
 - Külső hosztok: nincs, kivéve a github.com/YunoHost/apps hivatkozást a „névjegy” párbeszédablakban (csak akkor nyílik meg, ha rákattintasz, `noopener noreferrer` beállítással) és a jegyzetekben/hírcsatornákban lévő hivatkozásokat, amelyekre te kattintasz.
 - Böngészőengedélyek: nincs. A kiválasztott fájlok a böngészőben maradnak. Blobból létrehozott Workert (Regex Lab) és vágólapot („Másolás” gombok) használ.
 
@@ -59,6 +59,10 @@ A kódban ellenőrizve és fej nélküli Chromiumban tesztelve:
 Töltsd le az `index.html` fájlt, és nyisd meg egy böngészőben; nincsenek függőségei. Helyi szerverhez: `python3 -m http.server`.
 
 ## Előzmények / Changelog
+
+### 1.2.6 — 2026-10-23
+
+- A helyi tárhely kulcsai mostantól a `trusa-fara-frontiere.` előtagot használják (`FFF.store.migrate` induláskor, bármilyen olvasás előtt): a meglévő adatok automatikusan megmaradnak, a régi `.fff.json` mentések továbbra is importálhatók.
 
 ### 1.2.4 — 2026-10-22
 - fff-kit 1.1.4: érintési célpontok és minimális szövegméret

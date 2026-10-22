@@ -2,7 +2,7 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 1.2.5 · **Last updated:** 2026-10-23
+**Version:** 1.2.6 · **Last updated:** 2026-10-23
 
 Interface languages: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -41,7 +41,7 @@ Verified in code and tested in headless Chromium:
 ## Privacy and network
 
 - The app makes no network requests: the page's CSP has `connect-src 'none'` and `script-src` by SHA-256 hash (no `'unsafe-inline'`), with no external scripts, fonts or images. There is no telemetry, account or cookies.
-- Storage: `localStorage`, keys with the prefix `tff:` (`notebook`, `spreadsheet`, `mindmap`, `kanban`, `ledger`, `paste`), **unencrypted**. If storage is blocked (private mode), the app works but shows a warning that data is not kept.
+- Storage: `localStorage`, keys with the prefix `trusa-fara-frontiere.` (`notebook`, `spreadsheet`, `mindmap`, `kanban`, `ledger`, `paste`), **unencrypted**. If storage is blocked (private mode), the app works but shows a warning that data is not kept.
 - External hosts: none, apart from the link to github.com/YunoHost/apps in the "about" dialog (it opens only if you press it, with `noopener noreferrer`) and the links in notes/feeds that you press yourself.
 - Browser permissions: none. The files you choose stay in the browser. A Worker from a Blob (Regex Lab) and the clipboard ("Copy" buttons) are used.
 
@@ -59,6 +59,10 @@ Verified in code and tested in headless Chromium:
 Download `index.html` and open it in a browser; it has no dependencies. For a local server: `python3 -m http.server`.
 
 ## History / Changelog
+
+### 1.2.6 — 2026-10-23
+
+- Local storage keys now use the `trusa-fara-frontiere.` prefix (`FFF.store.migrate` at startup, before any read): existing data is kept automatically, and old `.fff.json` backups can still be imported.
 
 ### 1.2.4 — 2026-10-22
 - fff-kit 1.1.4: touch targets and minimum text size

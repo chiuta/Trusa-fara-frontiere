@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · **Deutsch** · [Magyar](README.hu.md)
 
-**Version:** 1.2.5 · **Zuletzt aktualisiert:** 2026-10-23
+**Version:** 1.2.6 · **Zuletzt aktualisiert:** 2026-10-23
 
 Oberflächensprachen: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -41,7 +41,7 @@ Im Code geprüft und in Headless-Chromium getestet:
 ## Datenschutz und Netzwerk
 
 - Die App stellt keine Netzwerkanfragen: Die CSP der Seite hat `connect-src 'none'` und `script-src` per SHA-256-Hash (ohne `'unsafe-inline'`), ohne externe Skripte, Schriften oder Bilder. Es gibt keine Telemetrie, kein Konto und keine Cookies.
-- Speicherung: `localStorage`, Schlüssel mit dem Präfix `tff:` (`notebook`, `spreadsheet`, `mindmap`, `kanban`, `ledger`, `paste`), **unverschlüsselt**. Ist der Speicher blockiert (privater Modus), funktioniert die App, zeigt aber eine Warnung, dass Daten nicht gespeichert werden.
+- Speicherung: `localStorage`, Schlüssel mit dem Präfix `trusa-fara-frontiere.` (`notebook`, `spreadsheet`, `mindmap`, `kanban`, `ledger`, `paste`), **unverschlüsselt**. Ist der Speicher blockiert (privater Modus), funktioniert die App, zeigt aber eine Warnung, dass Daten nicht gespeichert werden.
 - Externe Hosts: keine, außer dem Link zu github.com/YunoHost/apps im Dialog „Über“ (er öffnet sich nur, wenn du ihn anklickst, mit `noopener noreferrer`) und den Links in Notizen/Feeds, die du selbst anklickst.
 - Browser-Berechtigungen: keine. Ausgewählte Dateien bleiben im Browser. Verwendet werden ein Worker aus einem Blob (Regex Lab) und die Zwischenablage (Schaltflächen „Kopieren“).
 
@@ -59,6 +59,10 @@ Im Code geprüft und in Headless-Chromium getestet:
 Lade `index.html` herunter und öffne sie in einem Browser; sie hat keine Abhängigkeiten. Für einen lokalen Server: `python3 -m http.server`.
 
 ## Verlauf / Changelog
+
+### 1.2.6 — 2026-10-23
+
+- Die Schlüssel des lokalen Speichers verwenden jetzt das Präfix `trusa-fara-frontiere.` (`FFF.store.migrate` beim Start, vor jedem Lesezugriff): vorhandene Daten bleiben automatisch erhalten, alte `.fff.json`-Sicherungen lassen sich weiterhin importieren.
 
 ### 1.2.4 — 2026-10-22
 - fff-kit 1.1.4: Touch-Ziele und Mindestschriftgröße

@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · **Italiano** · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versione:** 1.2.5 · **Ultimo aggiornamento:** 2026-10-23
+**Versione:** 1.2.6 · **Ultimo aggiornamento:** 2026-10-23
 
 Lingue dell'interfaccia: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -41,7 +41,7 @@ Verificate nel codice e testate in Chromium headless:
 ## Privacy e rete
 
 - L'applicazione non effettua richieste di rete: la CSP della pagina ha `connect-src 'none'` e `script-src` tramite hash SHA-256 (senza `'unsafe-inline'`), senza script, font o immagini esterni. Non ci sono telemetria, account o cookie.
-- Archiviazione: `localStorage`, chiavi con prefisso `tff:` (`notebook`, `spreadsheet`, `mindmap`, `kanban`, `ledger`, `paste`), **non cifrata**. Se l'archiviazione è bloccata (modalità privata), l'applicazione funziona ma mostra un avviso che i dati non vengono conservati.
+- Archiviazione: `localStorage`, chiavi con prefisso `trusa-fara-frontiere.` (`notebook`, `spreadsheet`, `mindmap`, `kanban`, `ledger`, `paste`), **non cifrata**. Se l'archiviazione è bloccata (modalità privata), l'applicazione funziona ma mostra un avviso che i dati non vengono conservati.
 - Host esterni: nessuno, a parte il link a github.com/YunoHost/apps nella finestra «informazioni» (si apre solo se lo premi, con `noopener noreferrer`) e i link nelle note/feed su cui clicchi tu.
 - Permessi del browser: nessuno. I file scelti restano nel browser. Si usano un Worker da Blob (Regex Lab) e gli appunti di sistema (pulsanti «Copia»).
 
@@ -59,6 +59,10 @@ Verificate nel codice e testate in Chromium headless:
 Scarica `index.html` e aprilo in un browser; non ha dipendenze. Per un server locale: `python3 -m http.server`.
 
 ## Cronologia / Changelog
+
+### 1.2.6 — 2026-10-23
+
+- Le chiavi dell'archiviazione locale usano ora il prefisso `trusa-fara-frontiere.` (`FFF.store.migrate` all'avvio, prima di qualsiasi lettura): i dati esistenti vengono conservati automaticamente e i vecchi backup `.fff.json` si possono ancora importare.
 
 ### 1.2.4 — 2026-10-22
 - fff-kit 1.1.4: bersagli touch e testo minimo
