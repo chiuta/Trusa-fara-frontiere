@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · **Español** · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versión:** 1.2.0 · **Última actualización:** 2026-10-19
+**Versión:** 1.2.1 · **Última actualización:** 2026-10-22
 
 Idiomas de la interfaz: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -59,6 +59,9 @@ Verificadas en el código y probadas en Chromium sin interfaz:
 Descarga `index.html` y ábrelo en un navegador; no tiene dependencias. Para un servidor local: `python3 -m http.server`.
 
 ## Historial / Changelog
+
+### 1.2.1 — 2026-10-22
+- Correcciones de traducción: el título de la página y las metaetiquetas siguen el idioma de la interfaz; los textos de ejemplo de Regex Lab y del Cuaderno están traducidos.
 
 ### 1.1.0 — 2026-10-14
 - Copia de seguridad y etiquetado de datos (fff-kit).
