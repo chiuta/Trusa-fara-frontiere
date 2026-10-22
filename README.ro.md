@@ -2,7 +2,7 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.2.2 · **Ultima actualizare:** 2026-10-22
+**Versiune:** 1.2.3 · **Ultima actualizare:** 2026-10-22
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -59,6 +59,9 @@ Verificate în cod și testate în Chromium headless:
 Descarcă `index.html` și deschide-l în browser; nu are dependențe. Pentru server local: `python3 -m http.server`.
 
 ## Istoric / Changelog
+
+### 1.2.3 — 2026-10-22
+- fff-kit 1.1.2: PBKDF2 600 000 de iterații, protecție anti-clickjacking.
 
 ### 1.2.1 — 2026-10-22
 - Corecturi de traducere: titlul paginii și meta-etichetele urmează limba interfeței; textele-exemplu din Regex Lab și Caiet sunt traduse.
