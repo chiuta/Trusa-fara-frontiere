@@ -2,7 +2,7 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.2.6 · **Ultima actualizare:** 2026-10-23
+**Versiune:** 1.2.7 · **Ultima actualizare:** 2026-10-23
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -59,6 +59,9 @@ Verificate în cod și testate în Chromium headless:
 Descarcă `index.html` și deschide-l în browser; nu are dependențe. Pentru server local: `python3 -m http.server`.
 
 ## Istoric / Changelog
+
+### 1.2.7 — 2026-10-23
+- Notebook Markdown: adresele cu `*` sau `` ` `` nu mai sunt deformate (legăturile sunt extrase înaintea formatării).
 
 ### 1.2.6 — 2026-10-23
 

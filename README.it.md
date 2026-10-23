@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · **Italiano** · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versione:** 1.2.6 · **Ultimo aggiornamento:** 2026-10-23
+**Versione:** 1.2.7 · **Ultimo aggiornamento:** 2026-10-23
 
 Lingue dell'interfaccia: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -59,6 +59,9 @@ Verificate nel codice e testate in Chromium headless:
 Scarica `index.html` e aprilo in un browser; non ha dipendenze. Per un server locale: `python3 -m http.server`.
 
 ## Cronologia / Changelog
+
+### 1.2.7 — 2026-10-23
+- Blocco note Markdown: gli URL con `*` o `` ` `` non vengono più alterati (i link sono estratti prima della formattazione).
 
 ### 1.2.6 — 2026-10-23
 

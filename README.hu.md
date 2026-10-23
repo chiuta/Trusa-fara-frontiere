@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.2.6 · **Utolsó frissítés:** 2026-10-23
+**Verzió:** 1.2.7 · **Utolsó frissítés:** 2026-10-23
 
 A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -59,6 +59,9 @@ A kódban ellenőrizve és fej nélküli Chromiumban tesztelve:
 Töltsd le az `index.html` fájlt, és nyisd meg egy böngészőben; nincsenek függőségei. Helyi szerverhez: `python3 -m http.server`.
 
 ## Előzmények / Changelog
+
+### 1.2.7 — 2026-10-23
+- Markdown jegyzetfüzet: a `*` vagy `` ` `` karaktert tartalmazó URL-ek már nem torzulnak (a hivatkozásokat a formázás előtt vonja ki).
 
 ### 1.2.6 — 2026-10-23
 
