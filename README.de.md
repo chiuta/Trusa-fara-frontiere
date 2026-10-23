@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · **Deutsch** · [Magyar](README.hu.md)
 
-**Version:** 1.2.6 · **Zuletzt aktualisiert:** 2026-10-23
+**Version:** 1.2.7 · **Zuletzt aktualisiert:** 2026-10-23
 
 Oberflächensprachen: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -59,6 +59,9 @@ Im Code geprüft und in Headless-Chromium getestet:
 Lade `index.html` herunter und öffne sie in einem Browser; sie hat keine Abhängigkeiten. Für einen lokalen Server: `python3 -m http.server`.
 
 ## Verlauf / Changelog
+
+### 1.2.7 — 2026-10-23
+- Markdown-Notizbuch: URLs mit `*` oder `` ` `` werden nicht mehr verfälscht (Links werden vor der Formatierung herausgelöst).
 
 ### 1.2.6 — 2026-10-23
 

@@ -2,7 +2,7 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 1.2.6 · **Last updated:** 2026-10-23
+**Version:** 1.2.7 · **Last updated:** 2026-10-23
 
 Interface languages: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -59,6 +59,9 @@ Verified in code and tested in headless Chromium:
 Download `index.html` and open it in a browser; it has no dependencies. For a local server: `python3 -m http.server`.
 
 ## History / Changelog
+
+### 1.2.7 — 2026-10-23
+- Markdown notebook: URLs containing `*` or `` ` `` are no longer mangled (links are extracted before formatting).
 
 ### 1.2.6 — 2026-10-23
 

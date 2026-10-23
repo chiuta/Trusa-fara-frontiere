@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · **Português** · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versão:** 1.2.6 · **Última atualização:** 2026-10-23
+**Versão:** 1.2.7 · **Última atualização:** 2026-10-23
 
 Idiomas da interface: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -59,6 +59,9 @@ Verificadas no código e testadas em Chromium sem interface:
 Descarregue `index.html` e abra-o num navegador; não tem dependências. Para um servidor local: `python3 -m http.server`.
 
 ## Histórico / Changelog
+
+### 1.2.7 — 2026-10-23
+- Caderno Markdown: os URL com `*` ou `` ` `` já não são deformados (as ligações são extraídas antes da formatação).
 
 ### 1.2.6 — 2026-10-23
 
