@@ -1,4 +1,4 @@
-// Trusa fără frontiere 1.2.7 — Notebook Markdown: legături/URL și injecții. Rulare: node markdown.test.mjs <dir>   (rețea blocată, file://)
+// Trusa fără frontiere 1.2.8 — Notebook Markdown: legături/URL și injecții. Rulare: node markdown.test.mjs <dir>   (rețea blocată, file://)
 import {createRequire} from "module"; const require = createRequire("/opt/node-tools/package.json"); const {chromium} = require("playwright");
 let fails = 0; const check = (n, c, x) => { c ? console.log("  ok  " + n) : (fails++, console.log("FAIL  " + n + (x !== undefined ? "  -> " + JSON.stringify(x) : ""))); };
 const dir = process.argv[2];
