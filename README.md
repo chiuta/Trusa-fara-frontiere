@@ -2,11 +2,11 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 1.2.8 · **Last updated:** 2026-10-26
+**Version:** 2.0.0 · **Last updated:** 2026-10-26
 
 Interface languages: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
-A toolkit of 15 small tools in a single HTML file: regex, JSON, diff, hash, passwords, subnet, notes, spreadsheet, Kanban and more. It runs locally in the browser, with no account.
+A toolkit of 16 small tools in a single HTML file: regex, JSON, diff, hash, passwords, subnet, notes, spreadsheet, Kanban and more. It runs locally in the browser, with no account.
 
 **Live:** https://chiuta.github.io/Trusa-fara-frontiere/
 
@@ -19,6 +19,7 @@ A set of small modules, written from scratch, inspired by the core functionality
 ## Features
 
 Verified in code and tested in headless Chromium:
+- **Transformation chains (2.0)**: combine steps (trim, case, sort/dedupe/empty lines, regex replace or extract, prefix/suffix, slug, Base64/URL/Hex/HTML, JSON pretty/minify, SHA hash) into one flow; see the result after every step, run the chain in **batch** mode (each line separately), save named chains (`chains`, included in export/import), start from 4 templates and share a chain as JSON. All local; a failing step is reported, it never breaks the page.
 - **Regex Lab**: highlighted matches, groups (including named ones), flags g/i/m/s/u, replacement preview (`$1`, `$<name>`, `$&`, `$$`, `` $` ``, `$'`); it runs in a Worker with a 1.5 s limit, so that a pattern with catastrophic backtracking cannot freeze the page.
 - **JSON Lab**: validation, formatting (2/4 spaces/tab), minification, recursive key sorting, search by path (`a.b[0].c`) and conversion of a list of objects → CSV.
 - **Diff Viewer**: line diff (LCS), with the changed words highlighted in pairs of modified lines, with a size limit.
@@ -104,4 +105,4 @@ Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf. Built with Claude
 
 ## Summary
 
-Trusa fără frontiere ("Toolkit without borders") is a single-file, Romanian-language toolkit of 15 small offline tools: regex tester (Worker with timeout), JSON, diff, hash/encoding, file inspector, CSPRNG password and passphrase generator, subnet calculator, unit converter, Markdown notebook, mini spreadsheet, mind map, Kanban, ledger, snippet vault and an RSS/Atom file reader. No network requests (CSP `connect-src 'none'`), no telemetry; data stays unencrypted in `localStorage` with JSON export/import. Licence: MIT (see the LICENSE file).
+Trusa fără frontiere ("Toolkit without borders") is a single-file, Romanian-language toolkit of 16 small offline tools: regex tester (Worker with timeout), JSON, diff, hash/encoding, file inspector, CSPRNG password and passphrase generator, subnet calculator, unit converter, Markdown notebook, mini spreadsheet, mind map, Kanban, ledger, snippet vault and an RSS/Atom file reader. No network requests (CSP `connect-src 'none'`), no telemetry; data stays unencrypted in `localStorage` with JSON export/import. Licence: MIT (see the LICENSE file).

@@ -2,11 +2,11 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.2.8 · **Ultima actualizare:** 2026-10-26
+**Versiune:** 2.0.0 · **Ultima actualizare:** 2026-10-26
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
-Trusă de 15 unelte mici într-un singur fișier HTML: regex, JSON, diff, hash, parole, subnet, notițe, foaie de calcul, Kanban și altele. Rulează local în browser, fără cont.
+Trusă de 16 unelte mici într-un singur fișier HTML: regex, JSON, diff, hash, parole, subnet, notițe, foaie de calcul, Kanban și altele. Rulează local în browser, fără cont.
 
 **Live:** https://chiuta.github.io/Trusa-fara-frontiere/
 
@@ -19,6 +19,7 @@ Un set de module mici, scrise de la zero, inspirate de funcționalitatea de baz�
 ## Funcții
 
 Verificate în cod și testate în Chromium headless:
+- **Lanțuri de transformări (2.0)**: combini pași (spații, majuscule, sortare/duplicate/linii goale, înlocuire sau extragere cu regex, prefix/sufix, slug, Base64/URL/Hex/HTML, JSON formatat/compact, hash SHA) într-un flux; vezi rezultatul după fiecare pas, rulezi lanțul în **lot** (separat pe fiecare linie), salvezi lanțuri cu nume (`chains`, incluse în export/import), pornești de la 4 șabloane și partajezi un lanț ca JSON. Totul local; o eroare într-un pas este afișată, nu blochează pagina.
 - **Regex Lab**: potriviri evidențiate, grupuri (inclusiv numite), steaguri g/i/m/s/u, previzualizare de înlocuire (`$1`, `$<nume>`, `$&`, `$$`, `` $` ``, `$'`); rulează într-un Worker cu limită de 1,5 s, ca un pattern cu backtracking catastrofal să nu blocheze pagina.
 - **JSON Lab**: validare, formatare (2/4 spații/tab), minificare, sortare recursivă a cheilor, căutare după cale (`a.b[0].c`) și conversie listă de obiecte → CSV.
 - **Diff Viewer**: diferență pe linii (LCS), cu evidențierea cuvintelor schimbate în perechile de linii modificate, cu limită de dimensiune.
@@ -104,4 +105,4 @@ Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf. Construit cu Clau
 
 ## Rezumat
 
-Trusa fără frontiere este un set de instrumente într-un singur fișier, în limba română, cu 15 mici instrumente offline: tester regex (Worker cu timeout), JSON, diff, hash/codificare, inspector de fișiere, generator CSPRNG de parole și fraze-parolă, calculator de subrețele, convertor de unități, caiet Markdown, mini foaie de calcul, hartă mentală, Kanban, registru, seif de fragmente și cititor de fișiere RSS/Atom. Fără cereri de rețea (CSP `connect-src 'none'`), fără telemetrie; datele rămân necriptate în `localStorage`, cu export/import JSON. Licență: MIT (vezi fișierul LICENSE).
+Trusa fără frontiere este un set de instrumente într-un singur fișier, în limba română, cu 16 mici instrumente offline: tester regex (Worker cu timeout), JSON, diff, hash/codificare, inspector de fișiere, generator CSPRNG de parole și fraze-parolă, calculator de subrețele, convertor de unități, caiet Markdown, mini foaie de calcul, hartă mentală, Kanban, registru, seif de fragmente, lanțuri de transformări și cititor de fișiere RSS/Atom. Fără cereri de rețea (CSP `connect-src 'none'`), fără telemetrie; datele rămân necriptate în `localStorage`, cu export/import JSON. Licență: MIT (vezi fișierul LICENSE).

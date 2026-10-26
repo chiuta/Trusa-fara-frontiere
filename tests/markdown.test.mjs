@@ -1,4 +1,4 @@
-// Trusa fără frontiere 1.2.8 — Notebook Markdown: legături/URL și injecții. Rulare: node markdown.test.mjs <dir>   (rețea blocată, file://)
+// Trusa fără frontiere 2.0.0 — Notebook Markdown: legături/URL și injecții. Rulare: node markdown.test.mjs <dir>   (rețea blocată, file://)
 import {createRequire} from "module"; const require = createRequire(process.env.PW_ROOT || import.meta.url); const {chromium} = require("playwright");
 let fails = 0; const check = (n, c, x) => { c ? console.log("  ok  " + n) : (fails++, console.log("FAIL  " + n + (x !== undefined ? "  -> " + JSON.stringify(x) : ""))); };
 const dir = process.argv[2] || process.cwd();
@@ -10,7 +10,7 @@ async function preview(body) {
   await p.goto("file://" + dir + "/index.html"); await p.waitForTimeout(500);
   const n = await p.locator("#sidebar button").count();
   // modulul notebook: caută zona de previzualizare după conținut
-  let html = ""; for (let i = 0; i < n && !html; i++) { await p.locator("#sidebar button").nth(i).click({force: true}); await p.waitForTimeout(150); html = await p.evaluate(() => { const c = [...document.querySelectorAll("#content .card")].find(e => e.querySelector("a,code,strong,em,p,h1,h2")); return c ? c.innerHTML : ""; }); }
+  let html = ""; for (let i = 0; i < n && !html; i++) { if (!/Notebook/.test(await p.locator("#sidebar button").nth(i).innerText())) continue; await p.locator("#sidebar button").nth(i).click({force: true}); await p.waitForTimeout(150); html = await p.evaluate(() => { const c = [...document.querySelectorAll("#content .card")].find(e => e.querySelector("a,code,strong,em,p,h1,h2")); return c ? c.innerHTML : ""; }); }
   await ctx.close(); return {html, errs};
 }
 let r = await preview("[doc](https://ex.com/a_*b*_c`d`) si **bold** si `cod`");
