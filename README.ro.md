@@ -2,9 +2,9 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 2.0.1 · **Ultima actualizare:** 2026-10-27
+**Versiune:** 2.1.0 · **Ultima actualizare:** 2026-10-27
 
-**Stare:** stabilă (2.0.1). Toate modulele sunt locale; datele se păstrează necriptat în acest browser.
+**Stare:** stabilă (2.1.0). Toate modulele sunt locale; datele se păstrează necriptat în acest browser.
 
 **Offline:** da, complet. Nicio cerere de rețea (CSP `connect-src 'none'`); cititorul RSS/Atom citește XML încărcat sau lipit, nu descarcă fluxuri.
 

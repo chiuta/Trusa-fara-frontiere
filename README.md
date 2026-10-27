@@ -2,9 +2,9 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 2.0.1 · **Last updated:** 2026-10-27
+**Version:** 2.1.0 · **Last updated:** 2026-10-27
 
-**Status:** stable (2.0.1). All modules are local; data is stored unencrypted in this browser.
+**Status:** stable (2.1.0). All modules are local; data is stored unencrypted in this browser.
 
 **Offline:** yes, complete. No network requests at all (CSP `connect-src 'none'`); the RSS/Atom reader reads uploaded or pasted XML, it does not download feeds.
 
