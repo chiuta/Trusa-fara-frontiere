@@ -2,7 +2,11 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 2.0.0 · **Last updated:** 2026-10-26
+**Version:** 2.0.1 · **Last updated:** 2026-10-27
+
+**Status:** stable (2.0.1). All modules are local; data is stored unencrypted in this browser.
+
+**Offline:** yes, complete. No network requests at all (CSP `connect-src 'none'`); the RSS/Atom reader reads uploaded or pasted XML, it does not download feeds.
 
 Interface languages: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -30,6 +34,31 @@ Verified in code and tested in headless Chromium:
 - **Markdown notebook** (subset: headings, bulleted and numbered lists, quotes, horizontal rule, tables with `|`, code, http/https/mailto links; "Export .md" downloads the selected note), **Mini spreadsheet** (8×20, SUM/AVG/MIN/MAX/COUNT; "Export CSV" with the computed values and "Import CSV" with comma, semicolon or tab separator), **Mind map** (mouse, touch, keyboard), **Kanban board**, **Financial ledger**, **Snippet vault**.
 - **RSS/Atom reader** for uploaded or pasted XML files (it does not download feeds).
 - JSON export/import of all local data; day/night theme.
+
+## The 16 modules (listed from the code)
+
+The review mentioned 15 modules; the code registers **16** (the 16th, Transformation chains, arrived in 2.0.0).
+
+| # | Module | Category |
+|---|---|---|
+| 1 | Regex Lab | dev |
+| 2 | JSON Lab | dev |
+| 3 | Diff Viewer | dev |
+| 4 | Hash & Encoding Lab | dev |
+| 5 | Transformation chains | dev |
+| 6 | Markdown notebook | office |
+| 7 | Mini spreadsheet | office |
+| 8 | Mind map | office |
+| 9 | File inspector | small utilities |
+| 10 | Unit converter | small utilities |
+| 11 | Snippet vault | small utilities |
+| 12 | Subnet calculator | system tools |
+| 13 | Kanban board | productivity |
+| 14 | Ledger | productivity |
+| 15 | RSS/Atom reader | reading |
+| 16 | Password generator | synchronization |
+
+The same list is in the app, under "about & sources".
 
 ## User guide
 
@@ -61,6 +90,10 @@ Download `index.html` and open it in a browser; it has no dependencies. For a lo
 
 ## History / Changelog
 
+
+### 2.0.1 — 2026-10-27
+
+Text only: the list of the 16 modules (from the code) in the app and in the README, Status / Offline lines. See CHANGELOG.md.
 ### 1.2.7 — 2026-10-23
 - Markdown notebook: URLs containing `*` or `` ` `` are no longer mangled (links are extracted before formatting).
 
