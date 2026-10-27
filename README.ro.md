@@ -2,7 +2,11 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 2.0.0 · **Ultima actualizare:** 2026-10-26
+**Versiune:** 2.0.1 · **Ultima actualizare:** 2026-10-27
+
+**Stare:** stabilă (2.0.1). Toate modulele sunt locale; datele se păstrează necriptat în acest browser.
+
+**Offline:** da, complet. Nicio cerere de rețea (CSP `connect-src 'none'`); cititorul RSS/Atom citește XML încărcat sau lipit, nu descarcă fluxuri.
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -30,6 +34,31 @@ Verificate în cod și testate în Chromium headless:
 - **Notebook Markdown** (subset: titluri, liste cu buline și numerotate, citate, linie orizontală, tabele cu `|`, cod, link-uri http/https/mailto; „Export .md” descarcă nota selectată), **Mini foaie de calcul** (8×20, SUM/AVG/MIN/MAX/COUNT; „Export CSV” cu valorile calculate și „Import CSV” cu separator virgulă, punct și virgulă sau tab), **Hartă mentală** (mouse, atingere, tastatură), **Panou Kanban**, **Jurnal financiar**, **Vault de fragmente**.
 - **Cititor RSS/Atom** pentru fișiere XML încărcate sau lipite (nu descarcă feed-uri).
 - Export/import JSON al tuturor datelor locale; temă zi/noapte.
+
+## Cele 16 module (listate din cod)
+
+Recenzia vorbea de 15 module; codul înregistrează **16** (al 16-lea, Lanțuri de transformări, a apărut în 2.0.0).
+
+| # | Modul | Categorie |
+|---|---|---|
+| 1 | Regex Lab | dev |
+| 2 | JSON Lab | dev |
+| 3 | Diff Viewer | dev |
+| 4 | Hash & Encoding Lab | dev |
+| 5 | Lanțuri de transformări | dev |
+| 6 | Notebook Markdown | office |
+| 7 | Mini foaie de calcul | office |
+| 8 | Hartă mentală | office |
+| 9 | Inspector de fișiere | utilitare mici |
+| 10 | Convertor de unități | utilitare mici |
+| 11 | Vault de fragmente | utilitare mici |
+| 12 | Calculator subnet | instrumente de sistem |
+| 13 | Panou Kanban | productivitate |
+| 14 | Jurnal financiar | productivitate |
+| 15 | Cititor RSS/Atom | lectură |
+| 16 | Generator parole | sincronizare |
+
+Aceeași listă este în aplicație, la „despre și surse”.
 
 ## Manual de utilizare
 
@@ -61,6 +90,10 @@ Descarcă `index.html` și deschide-l în browser; nu are dependențe. Pentru se
 
 ## Istoric / Changelog
 
+
+### 2.0.1 — 2026-10-27
+
+Doar text: lista celor 16 module (din cod) în aplicație și în README, linii Stare / Offline. Vezi CHANGELOG.md.
 ### 1.2.7 — 2026-10-23
 - Notebook Markdown: adresele cu `*` sau `` ` `` nu mai sunt deformate (legăturile sunt extrase înaintea formatării).
 
