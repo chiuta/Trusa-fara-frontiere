@@ -17,8 +17,8 @@
     "trusa-fara-frontiere.",
     "trusa-fara-frontiere.lang"
   ],
-  "sizeBytes": 402055,
-  "sha256": "5868e34fc19e24a5b34f2720726d0a3ceabb0a9a4dffc4ee8bd333b617cbd60d",
+  "sizeBytes": 542489,
+  "sha256": "7260ee2a71eeacc8b8e21546efffac3b63e262ed07de62bff22891483d78f780",
   "csp": {
     "present": true,
     "directives": {
@@ -57,7 +57,11 @@
       "store",
       "dialog",
       "label",
-      "bundle"
+      "bundle",
+      "qr",
+      "p2p",
+      "sync",
+      "history"
     ]
   },
   "kit": {
@@ -67,7 +71,11 @@
       "store",
       "dialog",
       "label",
-      "bundle"
+      "bundle",
+      "qr",
+      "p2p",
+      "sync",
+      "history"
     ]
   },
   "selfSerializing": false
