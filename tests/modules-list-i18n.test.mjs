@@ -1,4 +1,4 @@
-// 2.1.0: lista celor 16 module din dialogul „despre” în fiecare limbă (fr/it/es/pt/de/hu: traducere automată) folosește exact numele din meniul limbii respective.
+// 2.1.1: lista celor 16 module din dialogul „despre” în fiecare limbă (fr/it/es/pt/de/hu: traducere automată) folosește exact numele din meniul limbii respective.
 import {launch, check, summary} from "./_lib.mjs";
 const {browser, page, st} = await launch({w: 1280, h: 800});
 await page.waitForTimeout(600);
