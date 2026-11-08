@@ -1,5 +1,9 @@
 # Jurnal de modificări
 
+## 2.1.3 — 2026-11-08
+
+- Corectat: numărul de module este 16 (nu 15) în README-urile DE/ES/FR/HU/IT/PT și în exemplul din JSON Lab.
+
 ## 2.1.0 — 2026-11-02 (reîmprospătare kit)
 
 - Nou (kit): **Sincronizare între dispozitive** (`FFF.sync`) — în dialogul «Transparență» (clic pe versiune → Copie de siguranță): conectezi două dispozitive direct (WebRTC, cod/QR, fără server și fără cont) și își schimbă datele aplicației; cea mai recentă valoare câștigă, secretele (chei API, parole) nu se trimit, ștergerile nu se propagă. Aplicarea trece prin importul kitului (confirmare, chei permise, rollback).

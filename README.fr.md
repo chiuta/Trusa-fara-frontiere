@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · **Français** · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version :** 2.1.2 · **Dernière mise à jour :** 2026-11-08
+**Version :** 2.1.3 · **Dernière mise à jour :** 2026-11-08
 
 Langues de l'interface : **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -104,4 +104,4 @@ Alexio — Alexandru-Ionuț Chiuță, contact : alexio@trom.tf. Construit avec C
 
 ## Résumé
 
-Trusa fără frontiere (« Trousse sans frontières ») est une trousse monofichier, en langue roumaine, de 15 petits outils hors ligne : testeur de regex (Worker avec délai), JSON, diff, hash/encodage, inspecteur de fichiers, générateur de mots de passe et de phrases secrètes CSPRNG, calculateur de sous-réseau, convertisseur d'unités, bloc-notes Markdown, mini tableur, carte mentale, Kanban, journal financier, coffre de fragments et lecteur de fichiers RSS/Atom. Aucune requête réseau (CSP `connect-src 'none'`), aucune télémétrie ; les données restent non chiffrées dans `localStorage`, avec export/import JSON. Licence : MIT (voir le fichier LICENSE).
+Trusa fără frontiere (« Trousse sans frontières ») est une trousse monofichier, en langue roumaine, de 16 petits outils hors ligne : testeur de regex (Worker avec délai), JSON, diff, chaînes de transformations, hash/encodage, inspecteur de fichiers, générateur de mots de passe et de phrases secrètes CSPRNG, calculateur de sous-réseau, convertisseur d'unités, bloc-notes Markdown, mini tableur, carte mentale, Kanban, journal financier, coffre de fragments et lecteur de fichiers RSS/Atom. Aucune requête réseau (CSP `connect-src 'none'`), aucune télémétrie ; les données restent non chiffrées dans `localStorage`, avec export/import JSON. Licence : MIT (voir le fichier LICENSE).

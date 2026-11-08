@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · **Italiano** · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versione:** 2.1.2 · **Ultimo aggiornamento:** 2026-11-08
+**Versione:** 2.1.3 · **Ultimo aggiornamento:** 2026-11-08
 
 Lingue dell'interfaccia: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -104,4 +104,4 @@ Alexio — Alexandru-Ionuț Chiuță, contatto: alexio@trom.tf. Costruito con Cl
 
 ## Sintesi
 
-Trusa fără frontiere («Kit senza frontiere») è un kit a file singolo, in lingua rumena, di 15 piccoli strumenti offline: tester di regex (Worker con timeout), JSON, diff, hash/codifica, ispettore di file, generatore di password e passphrase CSPRNG, calcolatore di subnet, convertitore di unità, taccuino Markdown, mini foglio di calcolo, mappa mentale, Kanban, registro finanziario, vault di frammenti e lettore di file RSS/Atom. Nessuna richiesta di rete (CSP `connect-src 'none'`), nessuna telemetria; i dati restano non cifrati in `localStorage`, con esportazione/importazione JSON. Licenza: MIT (vedi il file LICENSE).
+Trusa fără frontiere («Kit senza frontiere») è un kit a file singolo, in lingua rumena, di 16 piccoli strumenti offline: tester di regex (Worker con timeout), JSON, diff, catene di trasformazioni, hash/codifica, ispettore di file, generatore di password e passphrase CSPRNG, calcolatore di subnet, convertitore di unità, taccuino Markdown, mini foglio di calcolo, mappa mentale, Kanban, registro finanziario, vault di frammenti e lettore di file RSS/Atom. Nessuna richiesta di rete (CSP `connect-src 'none'`), nessuna telemetria; i dati restano non cifrati in `localStorage`, con esportazione/importazione JSON. Licenza: MIT (vedi il file LICENSE).

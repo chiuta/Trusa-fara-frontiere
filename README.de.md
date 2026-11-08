@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · **Deutsch** · [Magyar](README.hu.md)
 
-**Version:** 2.1.2 · **Zuletzt aktualisiert:** 2026-11-08
+**Version:** 2.1.3 · **Zuletzt aktualisiert:** 2026-11-08
 
 Oberflächensprachen: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -104,4 +104,4 @@ Alexio — Alexandru-Ionuț Chiuță, Kontakt: alexio@trom.tf. Mit Claude (Anthr
 
 ## Zusammenfassung
 
-Trusa fără frontiere („Werkzeugkasten ohne Grenzen“) ist ein rumänischsprachiger Einzeldatei-Werkzeugkasten mit 15 kleinen Offline-Tools: Regex-Tester (Worker mit Zeitlimit), JSON, Diff, Hash/Kodierung, Datei-Inspektor, CSPRNG-Passwort- und Passphrase-Generator, Subnetz-Rechner, Einheitenumrechner, Markdown-Notizbuch, Mini-Tabellenkalkulation, Mindmap, Kanban, Finanzjournal, Snippet-Tresor und ein RSS/Atom-Dateileser. Keine Netzwerkanfragen (CSP `connect-src 'none'`), keine Telemetrie; die Daten bleiben unverschlüsselt in `localStorage`, mit JSON-Export/-Import. Lizenz: MIT (siehe Datei LICENSE).
+Trusa fără frontiere („Werkzeugkasten ohne Grenzen“) ist ein rumänischsprachiger Einzeldatei-Werkzeugkasten mit 16 kleinen Offline-Tools: Regex-Tester (Worker mit Zeitlimit), JSON, Diff, Transformationsketten, Hash/Kodierung, Datei-Inspektor, CSPRNG-Passwort- und Passphrase-Generator, Subnetz-Rechner, Einheitenumrechner, Markdown-Notizbuch, Mini-Tabellenkalkulation, Mindmap, Kanban, Finanzjournal, Snippet-Tresor und ein RSS/Atom-Dateileser. Keine Netzwerkanfragen (CSP `connect-src 'none'`), keine Telemetrie; die Daten bleiben unverschlüsselt in `localStorage`, mit JSON-Export/-Import. Lizenz: MIT (siehe Datei LICENSE).

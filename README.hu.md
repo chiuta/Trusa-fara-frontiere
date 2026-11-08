@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 2.1.2 · **Utolsó frissítés:** 2026-11-08
+**Verzió:** 2.1.3 · **Utolsó frissítés:** 2026-11-08
 
 A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -104,4 +104,4 @@ Alexio — Alexandru-Ionuț Chiuță, elérhetőség: alexio@trom.tf. A szerző 
 
 ## Összefoglaló
 
-A Trusa fără frontiere („Határok nélküli készlet”) egy egyfájlos, román nyelvű készlet 15 kis offline eszközzel: regextesztelő (Worker időkorláttal), JSON, diff, hash/kódolás, fájlvizsgáló, CSPRNG jelszó- és jelmondatgenerátor, alhálózat-számoló, mértékegység-átváltó, Markdown jegyzetfüzet, mini táblázatkezelő, gondolattérkép, Kanban, pénzügyi napló, szövegrészlet-trezor és RSS/Atom-fájlolvasó. Nincsenek hálózati kérések (CSP `connect-src 'none'`), nincs telemetria; az adatok titkosítatlanul maradnak a `localStorage`-ban, JSON-exporttal/-importtal. Licenc: MIT (lásd a LICENSE fájlt).
+A Trusa fără frontiere („Határok nélküli készlet”) egy egyfájlos, román nyelvű készlet 16 kis offline eszközzel: regextesztelő (Worker időkorláttal), JSON, átalakítási láncok, diff, hash/kódolás, fájlvizsgáló, CSPRNG jelszó- és jelmondatgenerátor, alhálózat-számoló, mértékegység-átváltó, Markdown jegyzetfüzet, mini táblázatkezelő, gondolattérkép, Kanban, pénzügyi napló, szövegrészlet-trezor és RSS/Atom-fájlolvasó. Nincsenek hálózati kérések (CSP `connect-src 'none'`), nincs telemetria; az adatok titkosítatlanul maradnak a `localStorage`-ban, JSON-exporttal/-importtal. Licenc: MIT (lásd a LICENSE fájlt).
