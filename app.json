@@ -11,20 +11,21 @@
     "serviceWorker",
     "localStorage",
     "Web Crypto",
+    "WebGL",
     "Worker"
   ],
   "storageKeys": [
     "trusa-fara-frontiere.",
     "trusa-fara-frontiere.lang"
   ],
-  "sizeBytes": 596599,
-  "sha256": "3d4881b4d6b8ac34d8d7e09bcf506bb4d75de4616394512d0bbe834fba43b2b4",
+  "sizeBytes": 648240,
+  "sha256": "9ecc8c67f9af096d4dc2616d75458d6fbec4743115f63cb201feb132bbf189d8",
   "csp": {
     "present": true,
     "directives": {
       "default-src": "'none'",
       "style-src": "'unsafe-inline'",
-      "script-src": "'self' sha256×5",
+      "script-src": "'self' sha256×6",
       "img-src": "'self' data: blob:",
       "worker-src": "'self' blob:",
       "connect-src": "'none'",
